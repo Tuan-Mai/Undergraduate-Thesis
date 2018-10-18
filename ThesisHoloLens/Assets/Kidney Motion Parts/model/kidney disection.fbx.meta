@@ -1,0 +1,515 @@
+fileFormatVersion: 2
+guid: d68f8125339d34fb8b71993b37bfa76a
+timeCreated: 1511727404
+licenseType: Store
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: _may_2017_1
+    100002: arteria
+    100004: G_renal_Der
+    100006: G_renal_Izq
+    100008: //RootNode
+    100010: kidney_disection_DE
+    100012: kidney_disection_Iz
+    100014: kidneys
+    100016: kidneys_complete
+    100018: kidneys_Cube_2
+    100020: kidneys_Cube_2_2
+    100022: Light_abajisimo
+    100024: Light_arriba
+    100026: Light_arriba_2
+    100028: Light_arriba_3
+    100030: Light_arriba_4
+    100032: Light_arriba_5
+    100034: Light_arriba_6
+    100036: Light_azul_abajo
+    100038: Light_azul_abajo_0
+    100040: Light_azul_abajo_1
+    100042: Light_azul_abajo_2
+    100044: Light_azul_abajo_3
+    100046: luz_alta_2
+    100048: luz_alta_3
+    100050: luz_media_1
+    100052: luz_media_2
+    100054: luz_media_3
+    100056: Plane
+    100058: Plane_3
+    100060: vena
+    100062: kidney_disection_DE_MeshPart0
+    100064: kidney_disection_DE_MeshPart1
+    100066: kidney_disection_DE_MeshPart2
+    100068: kidney_disection_Iz_MeshPart0
+    100070: kidney_disection_Iz_MeshPart1
+    100072: kidney_disection_Iz_MeshPart2
+    100074: kidneys_1
+    400000: _may_2017_1
+    400002: arteria
+    400004: G_renal_Der
+    400006: G_renal_Izq
+    400008: //RootNode
+    400010: kidney_disection_DE
+    400012: kidney_disection_Iz
+    400014: kidneys
+    400016: kidneys_complete
+    400018: kidneys_Cube_2
+    400020: kidneys_Cube_2_2
+    400022: Light_abajisimo
+    400024: Light_arriba
+    400026: Light_arriba_2
+    400028: Light_arriba_3
+    400030: Light_arriba_4
+    400032: Light_arriba_5
+    400034: Light_arriba_6
+    400036: Light_azul_abajo
+    400038: Light_azul_abajo_0
+    400040: Light_azul_abajo_1
+    400042: Light_azul_abajo_2
+    400044: Light_azul_abajo_3
+    400046: luz_alta_2
+    400048: luz_alta_3
+    400050: luz_media_1
+    400052: luz_media_2
+    400054: luz_media_3
+    400056: Plane
+    400058: Plane_3
+    400060: vena
+    400062: kidney_disection_DE_MeshPart0
+    400064: kidney_disection_DE_MeshPart1
+    400066: kidney_disection_DE_MeshPart2
+    400068: kidney_disection_Iz_MeshPart0
+    400070: kidney_disection_Iz_MeshPart1
+    400072: kidney_disection_Iz_MeshPart2
+    400074: kidneys_1
+    2300000: arteria
+    2300002: G_renal_Der
+    2300004: G_renal_Izq
+    2300006: kidney_disection_DE
+    2300008: kidney_disection_Iz
+    2300010: kidneys_complete
+    2300012: kidneys_Cube_2
+    2300014: kidneys_Cube_2_2
+    2300016: Plane
+    2300018: Plane_3
+    2300020: vena
+    2300022: kidney_disection_DE_MeshPart0
+    2300024: kidney_disection_DE_MeshPart1
+    2300026: kidney_disection_DE_MeshPart2
+    2300028: kidney_disection_Iz_MeshPart0
+    2300030: kidney_disection_Iz_MeshPart1
+    2300032: kidney_disection_Iz_MeshPart2
+    3300000: arteria
+    3300002: G_renal_Der
+    3300004: G_renal_Izq
+    3300006: kidney_disection_DE
+    3300008: kidney_disection_Iz
+    3300010: kidneys_complete
+    3300012: kidneys_Cube_2
+    3300014: kidneys_Cube_2_2
+    3300016: Plane
+    3300018: Plane_3
+    3300020: vena
+    3300022: kidney_disection_DE_MeshPart0
+    3300024: kidney_disection_DE_MeshPart1
+    3300026: kidney_disection_DE_MeshPart2
+    3300028: kidney_disection_Iz_MeshPart0
+    3300030: kidney_disection_Iz_MeshPart1
+    3300032: kidney_disection_Iz_MeshPart2
+    4300000: kidney_disection_DE
+    4300002: kidney_disection_Iz
+    4300004: kidneys_complete
+    4300006: G_renal_Izq
+    4300008: G_renal_Der
+    4300010: vena
+    4300012: arteria
+    4300014: kidneys_Cube_2
+    4300016: kidneys_Cube_2_2
+    4300018: Plane
+    4300020: Plane_3
+    4300022: kidney_disection_DE_MeshPart0
+    4300024: kidney_disection_DE_MeshPart1
+    4300026: kidney_disection_DE_MeshPart2
+    4300028: kidney_disection_Iz_MeshPart0
+    4300030: kidney_disection_Iz_MeshPart1
+    4300032: kidney_disection_Iz_MeshPart2
+    7400000: idle
+    7400002: expand
+    7400004: join
+    9500000: //RootNode
+    11100000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: idle
+      takeName: C4D Animation Take
+      firstFrame: 4
+      lastFrame: 6
+      wrapMode: 1
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: _may_2017_1
+        weight: 1
+      - path: _may_2017_1/Light_abajisimo
+        weight: 1
+      - path: _may_2017_1/Light_arriba_3
+        weight: 1
+      - path: _may_2017_1/Light_azul_abajo
+        weight: 1
+      - path: _may_2017_1/Light_azul_abajo_0
+        weight: 1
+      - path: _may_2017_1/Light_azul_abajo_0/Light_azul_abajo_2
+        weight: 1
+      - path: _may_2017_1/Light_azul_abajo_1
+        weight: 1
+      - path: _may_2017_1/Light_azul_abajo_1/Light_azul_abajo_3
+        weight: 1
+      - path: _may_2017_1/luz_alta_2
+        weight: 1
+      - path: _may_2017_1/luz_alta_2/Light_arriba_2
+        weight: 1
+      - path: _may_2017_1/luz_alta_3
+        weight: 1
+      - path: _may_2017_1/luz_alta_3/Light_arriba
+        weight: 1
+      - path: _may_2017_1/luz_media_1
+        weight: 1
+      - path: _may_2017_1/luz_media_1/Light_arriba_4
+        weight: 1
+      - path: _may_2017_1/luz_media_2
+        weight: 1
+      - path: _may_2017_1/luz_media_2/Light_arriba_5
+        weight: 1
+      - path: _may_2017_1/luz_media_3
+        weight: 1
+      - path: _may_2017_1/luz_media_3/Light_arriba_6
+        weight: 1
+      - path: _may_2017_1/Plane
+        weight: 1
+      - path: _may_2017_1/Plane_3
+        weight: 1
+      - path: kidneys
+        weight: 1
+      - path: kidneys/arteria
+        weight: 1
+      - path: kidneys/G_renal_Der
+        weight: 1
+      - path: kidneys/G_renal_Izq
+        weight: 1
+      - path: kidneys/kidney_disection_DE
+        weight: 1
+      - path: kidneys/kidney_disection_DE/kidney_disection_DE_MeshPart0
+        weight: 1
+      - path: kidneys/kidney_disection_DE/kidney_disection_DE_MeshPart1
+        weight: 1
+      - path: kidneys/kidney_disection_DE/kidney_disection_DE_MeshPart2
+        weight: 1
+      - path: kidneys/kidney_disection_Iz
+        weight: 1
+      - path: kidneys/kidney_disection_Iz/kidney_disection_Iz_MeshPart0
+        weight: 1
+      - path: kidneys/kidney_disection_Iz/kidney_disection_Iz_MeshPart1
+        weight: 1
+      - path: kidneys/kidney_disection_Iz/kidney_disection_Iz_MeshPart2
+        weight: 1
+      - path: kidneys/kidneys_complete
+        weight: 1
+      - path: kidneys/kidneys_Cube_2
+        weight: 1
+      - path: kidneys/kidneys_Cube_2_2
+        weight: 1
+      - path: kidneys/vena
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: expand
+      takeName: C4D Animation Take
+      firstFrame: 6
+      lastFrame: 45
+      wrapMode: 1
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: _may_2017_1
+        weight: 1
+      - path: _may_2017_1/Light_abajisimo
+        weight: 1
+      - path: _may_2017_1/Light_arriba_3
+        weight: 1
+      - path: _may_2017_1/Light_azul_abajo
+        weight: 1
+      - path: _may_2017_1/Light_azul_abajo_0
+        weight: 1
+      - path: _may_2017_1/Light_azul_abajo_0/Light_azul_abajo_2
+        weight: 1
+      - path: _may_2017_1/Light_azul_abajo_1
+        weight: 1
+      - path: _may_2017_1/Light_azul_abajo_1/Light_azul_abajo_3
+        weight: 1
+      - path: _may_2017_1/luz_alta_2
+        weight: 1
+      - path: _may_2017_1/luz_alta_2/Light_arriba_2
+        weight: 1
+      - path: _may_2017_1/luz_alta_3
+        weight: 1
+      - path: _may_2017_1/luz_alta_3/Light_arriba
+        weight: 1
+      - path: _may_2017_1/luz_media_1
+        weight: 1
+      - path: _may_2017_1/luz_media_1/Light_arriba_4
+        weight: 1
+      - path: _may_2017_1/luz_media_2
+        weight: 1
+      - path: _may_2017_1/luz_media_2/Light_arriba_5
+        weight: 1
+      - path: _may_2017_1/luz_media_3
+        weight: 1
+      - path: _may_2017_1/luz_media_3/Light_arriba_6
+        weight: 1
+      - path: _may_2017_1/Plane
+        weight: 1
+      - path: _may_2017_1/Plane_3
+        weight: 1
+      - path: kidneys
+        weight: 1
+      - path: kidneys/arteria
+        weight: 1
+      - path: kidneys/G_renal_Der
+        weight: 1
+      - path: kidneys/G_renal_Izq
+        weight: 1
+      - path: kidneys/kidney_disection_DE
+        weight: 1
+      - path: kidneys/kidney_disection_DE/kidney_disection_DE_MeshPart0
+        weight: 1
+      - path: kidneys/kidney_disection_DE/kidney_disection_DE_MeshPart1
+        weight: 1
+      - path: kidneys/kidney_disection_DE/kidney_disection_DE_MeshPart2
+        weight: 1
+      - path: kidneys/kidney_disection_Iz
+        weight: 1
+      - path: kidneys/kidney_disection_Iz/kidney_disection_Iz_MeshPart0
+        weight: 1
+      - path: kidneys/kidney_disection_Iz/kidney_disection_Iz_MeshPart1
+        weight: 1
+      - path: kidneys/kidney_disection_Iz/kidney_disection_Iz_MeshPart2
+        weight: 1
+      - path: kidneys/kidneys_complete
+        weight: 1
+      - path: kidneys/kidneys_Cube_2
+        weight: 1
+      - path: kidneys/kidneys_Cube_2_2
+        weight: 1
+      - path: kidneys/vena
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: join
+      takeName: C4D Animation Take
+      firstFrame: 45
+      lastFrame: 90
+      wrapMode: 1
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: _may_2017_1
+        weight: 1
+      - path: _may_2017_1/Light_abajisimo
+        weight: 1
+      - path: _may_2017_1/Light_arriba_3
+        weight: 1
+      - path: _may_2017_1/Light_azul_abajo
+        weight: 1
+      - path: _may_2017_1/Light_azul_abajo_0
+        weight: 1
+      - path: _may_2017_1/Light_azul_abajo_0/Light_azul_abajo_2
+        weight: 1
+      - path: _may_2017_1/Light_azul_abajo_1
+        weight: 1
+      - path: _may_2017_1/Light_azul_abajo_1/Light_azul_abajo_3
+        weight: 1
+      - path: _may_2017_1/luz_alta_2
+        weight: 1
+      - path: _may_2017_1/luz_alta_2/Light_arriba_2
+        weight: 1
+      - path: _may_2017_1/luz_alta_3
+        weight: 1
+      - path: _may_2017_1/luz_alta_3/Light_arriba
+        weight: 1
+      - path: _may_2017_1/luz_media_1
+        weight: 1
+      - path: _may_2017_1/luz_media_1/Light_arriba_4
+        weight: 1
+      - path: _may_2017_1/luz_media_2
+        weight: 1
+      - path: _may_2017_1/luz_media_2/Light_arriba_5
+        weight: 1
+      - path: _may_2017_1/luz_media_3
+        weight: 1
+      - path: _may_2017_1/luz_media_3/Light_arriba_6
+        weight: 1
+      - path: _may_2017_1/Plane
+        weight: 1
+      - path: _may_2017_1/Plane_3
+        weight: 1
+      - path: kidneys
+        weight: 1
+      - path: kidneys/arteria
+        weight: 1
+      - path: kidneys/G_renal_Der
+        weight: 1
+      - path: kidneys/G_renal_Izq
+        weight: 1
+      - path: kidneys/kidney_disection_DE
+        weight: 1
+      - path: kidneys/kidney_disection_DE/kidney_disection_DE_MeshPart0
+        weight: 1
+      - path: kidneys/kidney_disection_DE/kidney_disection_DE_MeshPart1
+        weight: 1
+      - path: kidneys/kidney_disection_DE/kidney_disection_DE_MeshPart2
+        weight: 1
+      - path: kidneys/kidney_disection_Iz
+        weight: 1
+      - path: kidneys/kidney_disection_Iz/kidney_disection_Iz_MeshPart0
+        weight: 1
+      - path: kidneys/kidney_disection_Iz/kidney_disection_Iz_MeshPart1
+        weight: 1
+      - path: kidneys/kidney_disection_Iz/kidney_disection_Iz_MeshPart2
+        weight: 1
+      - path: kidneys/kidneys_complete
+        weight: 1
+      - path: kidneys/kidneys_Cube_2
+        weight: 1
+      - path: kidneys/kidneys_Cube_2_2
+        weight: 1
+      - path: kidneys/vena
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 0.3
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 1
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 1
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 1
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
