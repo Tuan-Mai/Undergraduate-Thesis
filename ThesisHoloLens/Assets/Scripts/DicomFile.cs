@@ -35,7 +35,9 @@ public class DicomFile : MonoBehaviour
     string _msPatientID;
     //CArray<DicomFileRecord*, DicomFileRecord*> _marrpRecord;
     CArray _marrpRecord;
-    string _msFileName; 
+    string _msFileName;
+
+    bool _mbExplicitVR;
 
     void Init()
     {
@@ -72,21 +74,37 @@ public class DicomFile : MonoBehaviour
     {
         _msFileName = sFileName;
 
-        //set filename to the end of path 
+        //TODO: set filename to the end of path 
         string path = "Assets/Datasets/CTDataset1/CT002000020.dcm";
 
-        // Delete the file if it exists.
-        if (File.Exists(path))
-        {
-            using (FileStream fs = File.Open(path, FileMode.Open, FileAccess.Read))
-            {
-                return true;
-            }
-        }
-        else
+
+        if (!File.Exists(path))
         {
             return false;
         }
+        
+        using (FileStream fs = File.Open(path, FileMode.Open, FileAccess.Read))
+        {
+            string sFileType = _msFileName.Substring(3);
+            sFileType.ToUpper();
+
+            if (sFileType == "DCM")
+            {
+                // skip first 128 + 4 bytes
+                fs.Seek(132, SeekOrigin.Begin);
+
+                // take DICOM file as explicit VR by default
+                _mbExplicitVR = true;
+            }
+            else
+            {
+                // img file is always implicit VR
+                _mbExplicitVR = false;
+            }
+
+        }
+
+        
     }
 
     /*
@@ -284,7 +302,7 @@ ASSERT(k==1);
 
     }
 
-    bool m_bExplicitVR;
+    
 
     // Start is called before the first frame update
     void Start()
