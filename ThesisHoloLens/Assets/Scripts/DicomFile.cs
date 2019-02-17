@@ -34,7 +34,7 @@ public class DicomFile : MonoBehaviour
     
     string _msPatientID;
     //CArray<DicomFileRecord*, DicomFileRecord*> _marrpRecord;
-    CArray _marrpRecord;
+    List<DicomFileRecord> _marrpRecord=new List<DicomFileRecord>();
     string _msFileName;
 
     bool _mbExplicitVR;
@@ -63,7 +63,7 @@ public class DicomFile : MonoBehaviour
 
        
 
-        m_ulPixelDataLen = 0;
+        _mulPixelDataLen = 0;
 
         _msFileName=null;//Empty();
 
@@ -82,7 +82,7 @@ public class DicomFile : MonoBehaviour
         {
             return false;
         }
-        
+
         using (FileStream fs = File.Open(path, FileMode.Open, FileAccess.Read))
         {
             string sFileType = _msFileName.Substring(3);
@@ -102,10 +102,249 @@ public class DicomFile : MonoBehaviour
                 _mbExplicitVR = false;
             }
 
+
+            // read all records until end
+            bool bReadRecordOK = true;
+            DicomFileRecord pRecord = new DicomFileRecord();
+
+            while ((fs.ReadByte() > -1) && bReadRecordOK)
+            {
+
+                // add record to the record list
+                //pRecord = new DicomFileRecord;
+                _marrpRecord.Add(pRecord);
+
+                bReadRecordOK = ReadRecord(fs, pRecord);
+
+            }
+        }
+    }
+    bool ReadRecord(FileStream fp, DicomFileRecord pRecord){
+        byte[] szTag = new byte[4];
+            byte[] szVR=new byte[3];
+        char[] pData;
+
+
+    
+
+        // set the position of the tag 
+     //   pRecord->m_iFilePos = ftell(fp);
+
+        // read group and element 
+        // group		- 2 bytes 
+        // element		- 2 bytes 
+        int i;
+        // fp.Read(szTag, 1, 4, fp);
+        fp.Read(szTag, 1, 4);
+
+        pRecord._musGrp = (ushort)(szTag);
+        pRecord._musEle = (ushort)(szTag + 2);
+        pRecord._musTagLen = 4;
+
+   
+
+            if (pRecord->m_usGrp != 0x0002 && m_bExplicitVR == false)
+            {
+                // data length	- 4 bytes
+                if (fread(&pRecord->m_ulLen, 1, 4, fp) != 4)
+                {
+                    return false;
+                }
+                pRecord->m_usTagLen += 4;
+            }
+            else
+            { // pRecord->m_usGrp == 0x0002 || m_bExplicitVR == true
+              // group 0x0002 is always explicit VR
+              // read VR
+                if (fread(szVR, 1, 2, fp) != 2)
+                {
+                    BBTErrMsgBox("Failed to read DICOM tag (VR): \n" + m_sFileName);
+                    return false;
+                }
+                pRecord->m_usTagLen += 2;
+
+                szVR[2] = '\0';
+                pRecord->m_sVR.Format("%s", szVR);
+
+                // read data length
+                if (strcmp(szVR, "OB") == 0 ||
+                    strcmp(szVR, "OW") == 0 ||
+                    strcmp(szVR, "OF") == 0 ||
+                    strcmp(szVR, "SQ") == 0 ||
+                    strcmp(szVR, "UT") == 0 ||
+                    strcmp(szVR, "UN") == 0)
+                {
+
+                    // skip unused 2 bytes
+                    fseek(fp, 2, SEEK_CUR);
+                    pRecord->m_usTagLen += 2;
+
+                    // read data length as unsigned long 
+                    if (fread(&pRecord->m_ulLen, 1, 4, fp) != 4)
+                    {
+                        BBTErrMsgBox("Failed to read DICOM tag length: \n" + m_sFileName);
+                        return false;
+                    }
+                    pRecord->m_usTagLen += 4;
+                }
+                else
+                {
+                    // read data length as unsigned short 
+                    unsigned short usLen;
+                    if (fread(&usLen, 1, 2, fp) != 2)
+                    {
+                        return false;
+                    }
+                    pRecord->m_ulLen = usLen;
+                    pRecord->m_usTagLen += 2;
+                }
+            }
         }
 
-        
+
+        // find the record from Dicom dictionary
+        CBBTDicomDictRecord* pDictRecord = NULL;
+
+
+        // only even groups are DICOM standard group
+        // odd groups are private groups so 
+        // So we find the group from DICOM dictionary only it is DICOM standard group 
+        if (pRecord->m_usGrp % 2 == 0)
+        {
+            pDictRecord = gpDicomDict->Find(pRecord->m_usGrp, pRecord->m_usEle);
+        }
+
+        if (pDictRecord)
+        {
+            // set record name and VR 
+            pRecord->m_sName = pDictRecord->m_sName;
+            pRecord->m_sVR = pDictRecord->m_sVR;
+
+
+            if (pDictRecord->m_sVR == "SQ" || pDictRecord->m_sVR == "??" || pRecord->m_ulLen == 0)
+            {
+                pRecord->m_pData = NULL;
+                return true;
+            }
+        }
+
+        // set data length to zero if length is 0xFFFFFFFF (undefined length please see DICOM standard)
+        if (pRecord->m_ulLen == 0xFFFFFFFF)
+        {
+            pRecord->m_ulLen = 0;
+            pRecord->m_pData = NULL;
+            return true;
+        }
+
+        // read the data
+        pData = (char*)malloc(pRecord->m_ulLen + 1);
+        if (!pData)
+        {
+            BBTErrMsgBox("Out of Memmory!: Read DICOM data!");
+            return false;
+        }
+
+        if (fread(pData, 1, pRecord->m_ulLen, fp) != pRecord->m_ulLen)
+        {
+            BBTErrMsgBox("Failed to read DICOM tag data: \n" + m_sFileName);
+            delete pData;
+            return false;
+        }
+// 
+        // set data pointer
+        pRecord->m_pData = pData;
+        *(pData + pRecord->m_ulLen) = 0;
+
+        //jctest
+        //	if (pRecord->m_usGrp == 0x0008 && (pRecord->m_usEle == 0x0000 || pRecord->m_usEle == 0x0001)) {
+        //		ULONG ul = *((ULONG *)pRecord->m_pData);
+        //	}
+        //jctest
+
+        // check if it is Explict VR or Implicit VR
+        if (pRecord->m_usGrp == 0x0002 && pRecord->m_usEle == 0x0010)
+        {
+            if (strcmp(pRecord->m_pData, "1.2.840.10008.1.2") == 0)
+            {
+                m_bExplicitVR = false;
+            }
+            else
+            {  // 1.2.840.10008.1.2.1 is Explicit VR
+                m_bExplicitVR = true;
+            }
+        }
+
+        // clasify the dicom into POI/ROI/RTPLAN/CT
+        if (m_iDicomFileType == BBT_UNKNOWN)
+        {
+
+            // check modality
+            if (pRecord->m_usGrp == 0x0008 && pRecord->m_usEle == 0x0060)
+            {
+                if (strcmp(pRecord->m_pData, "CT") == 0)
+                {
+
+                    // set file type as CT
+                    m_iDicomFileType = BBT_DICOM_FILE_CT;
+                }
+                else if (strcmp(pRecord->m_pData, "RTPLAN") == 0)
+                {
+
+                    // set file type as RTPLAN
+                    m_iDicomFileType = BBT_DICOM_FILE_RTPLAN;
+
+                    // set instance number for sorting
+                    m_iInstanceNum = BBT_INSTANCE_NUM_RTPLAN;
+                }
+            }
+            else if (pRecord->m_usGrp == 0x3006 && pRecord->m_usEle == 0x0004)
+            {
+                // check struct set name
+                if (strcmp(pRecord->m_pData, "POI ") == 0)
+                {
+
+                    // set file type as POI
+                    m_iDicomFileType = BBT_DICOM_FILE_POI;
+
+                    // set instance number for sorting
+                    m_iInstanceNum = BBT_INSTANCE_NUM_POI;
+                }
+                else if (strcmp(pRecord->m_pData, "ROI ") == 0 /*|| strcmp(pRecord->m_pData, "test") == 0*/)
+                {
+
+                    // set file type as ROI
+                    m_iDicomFileType = BBT_DICOM_FILE_ROI;
+
+                    // set instance number for sorting
+                    m_iInstanceNum = BBT_INSTANCE_NUM_ROI;
+                }
+            }
+        }
+
+
+        // for debug
+        //	char szData[1024];
+        //	memcpy(szData, pData, min(sizeof(szData),pRecord->m_ulLen)); 
+        return true;
     }
+
+    CBBTDicomFileRecord* CBBTDicomFile::FindRecord(unsigned short usGrp, unsigned short usEle)
+    {
+        register CBBTDicomFileRecord *pRecord;
+        register int i;
+        for (i = 0; i < m_arrpRecord.GetSize(); i++)
+        {
+            pRecord = m_arrpRecord[i];
+            if (pRecord->m_usGrp == usGrp && pRecord->m_usEle == usEle)
+            {
+                return pRecord;
+            }
+        }
+        return NULL;
+
+        return true;
+    }
+}
 
     /*
     void GetDicomFileCTInfo() {
@@ -227,7 +466,7 @@ ASSERT(k==1);
 
     DicomFile() { }
 
-    */
+    
   
     bool m_bInterpolationFileFlag;
     // POI/ROI/RTPLAN/CT
@@ -316,3 +555,4 @@ ASSERT(k==1);
         
     }
 }
+*/

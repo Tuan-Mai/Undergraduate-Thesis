@@ -12,14 +12,14 @@ public class DicomFileRecord : MonoBehaviour
     // VR			: 0 or 2 bytes 
     // data length	: 4 or 2 bytes 
 
-    ushort _musGrp = 0;
-	ushort _musEle = 0;
-	ulong _mulLen = 0;
-	string _msName;
-	string _msVR = " ";
-	ushort _musTagLen = 0;
-	long _miFilePos = 0;
-	byte[] _pData; // make sure this is a pointer or reference
+    public ushort _musGrp = 0;
+    public ushort _musEle = 0;
+    public ulong _mulLen = 0;
+    public string _msName;
+    public string _msVR = " ";
+    public ushort _musTagLen = 0;
+    public long _miFilePos = 0;
+    public byte[] _pData; // make sure this is a pointer or reference
 
     
 
