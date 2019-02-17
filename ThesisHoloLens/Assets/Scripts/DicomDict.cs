@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 public class DicomDict : MonoBehaviour
@@ -8,33 +9,37 @@ public class DicomDict : MonoBehaviour
     string _msFileName;
     List<DicomDictRecord> m_arrpRecord;
 
+    byte[] szTemp;
+
     bool  Load(string sFileName)
     {
 
         // the format of DICOM dictionary record
         // (9999 9999) name VR1 or VR2 VM RET
-        byte[] szTemp= new byte[1024];
+        szTemp= new byte[1024];
         string sTemp;
         DicomDictRecord pDictRecord;
         FileStream fp;
         int i;
 
         _msFileName = sFileName;
-        if ((File.Open(_msFileName, FileMode.Open, FileAccess.Read)) == null)
+        if ((fp = File.Open(_msFileName, FileMode.Open, FileAccess.Read)) == null)
         {
             //BBTErrMsgBox("Failed to open DICOM Dictionary file:\n" + m_sFileName);
             return false;
         }
 
+        StreamReader sr = new StreamReader(fp);
 
-        while (fgets(szTemp, sizeof(szTemp), fp) != NULL)
+        //while (fp.Read(szTemp, 1, Marshal.SizeOf(szTemp)) != null)
+        while (sr.ReadLine() != null)
         {
 
 
             // get rid of newline and spaces at the end of the record
-            i = strlen(szTemp);
+            i = (szTemp.Length);
             while (szTemp[i - 1] == '\n' || szTemp[i - 1] == ' ') --i;
-            szTemp[i] = '\0';
+            szTemp[i] = (byte)'\0';
 
             // create new Dicom Dictionary record
             // and add it to the array
