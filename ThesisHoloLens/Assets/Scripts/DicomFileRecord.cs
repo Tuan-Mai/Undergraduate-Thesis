@@ -5,39 +5,41 @@ using UnityEngine;
 
 public class DicomFileRecord : MonoBehaviour
 {
-
-    void Free()
-    {
-
-    }
-
-    void Init()
-    {
-
-    }
-
-    int GetRecordLen() {
-        return 0;
-    }
-
-    DicomFileRecord() { }
-    
-
-    ushort m_usGrp;
-    ushort m_usEle;
-    ulong m_ulLen;
-    string m_sVR;
-
+    // Feb 19th, 2019
     // this is the byte length in the dicom file including
     // group		: 2 bytes:
     // element		: 2 bytes
     // VR			: 0 or 2 bytes 
     // data length	: 4 or 2 bytes 
-    ushort m_usTagLen;
-    long m_iFilePos;
 
-    string m_sName;
-    char[] m_pData;
+    ushort _musGrp = 0;
+	ushort _musEle = 0;
+	ulong _mulLen = 0;
+	string _msName;
+	string _msVR = " ";
+	ushort _musTagLen = 0;
+	long _miFilePos = 0;
+	byte[] _pData; // make sure this is a pointer or reference
+
+    
+
+    int GetRecordLen() {
+        if (_msVR.Equals("SQ") || (_musGrp == 0xfffe && _musEle == 0xe000))
+            // do not include the data lengn if it is a Sequence or an item
+            return _musTagLen;
+        // else
+            ulong temp = _musTagLen + _mulLen;
+            return (int)temp;
+    }
+
+   
+
+   
+
+  
+   
+
+    // end of Feb 19th
     // Start is called before the first frame update
     void Start()
     {
