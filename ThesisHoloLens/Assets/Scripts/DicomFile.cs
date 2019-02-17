@@ -70,32 +70,25 @@ public class DicomFile : MonoBehaviour
 
     bool Load(string sFileName)
     {
+        _msFileName = sFileName;
 
-        string path = @"c:\temp\MyTest.txt";
+        //set filename to the end of path 
+        string path = "Assets/Datasets/CTDataset1/CT002000020.dcm";
 
         // Delete the file if it exists.
         if (File.Exists(path))
         {
-            File.Delete(path);
+            using (FileStream fs = File.Open(path, FileMode.Open, FileAccess.Read))
+            {
+                return true;
+            }
         }
-
-        // initilize the image reader
-        Init();
-
-        // set the file name
-        m_sFileName = sFileName;
-
-        // open file
-        fp = fopen(m_sFileName, "rb");
-        if (!fp)
+        else
         {
-            BBTErrMsgBox("Failed to open file: \n" + m_sFileName);
             return false;
         }
-
-
-        return true;
     }
+
     /*
     void GetDicomFileCTInfo() {
 
@@ -217,8 +210,6 @@ ASSERT(k==1);
     DicomFile() { }
 
     */
-
-    void Init() { }
   
     bool m_bInterpolationFileFlag;
     // POI/ROI/RTPLAN/CT
