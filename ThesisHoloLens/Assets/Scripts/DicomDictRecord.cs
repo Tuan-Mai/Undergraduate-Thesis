@@ -5,8 +5,8 @@ using UnityEngine;
 public class DicomDictRecord : MonoBehaviour
 {
     public ushort _musGrp = 0;
-    public ushort m_usEle = 0;
-    public string m_sName =null;
+    public ushort _musEle = 0;
+    public string _msName =null;
     public string _msVR =null;
     public string _msVM =null;
 	public bool _mbRet = false;

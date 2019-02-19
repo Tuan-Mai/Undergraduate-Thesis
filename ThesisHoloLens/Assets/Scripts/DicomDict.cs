@@ -67,42 +67,42 @@ public class DicomDict : MonoBehaviour
 
             // set the VM of the tag
             i = sTemp.ReverseFind(' ');
-            pDictRecord->m_sVM = sTemp.Mid(i + 1);
-            sTemp.Delete(i, pDictRecord->m_sVM.GetLength() + 1);
+            pDictRecord._msVM = sTemp.Substring(i + 1);
+            sTemp.Remove(i, pDictRecord._msVM.Length + 1);
 
             // set the VR of the tag
             i = sTemp.ReverseFind(' ');
-            pDictRecord->m_sVR = sTemp.Mid(i + 1);
-            ASSERT(pDictRecord->m_sVR.GetLength() == 2);
-            sTemp.Delete(i, pDictRecord->m_sVR.GetLength() + 1);
+            pDictRecord._msVR = sTemp.Substring(i + 1);
+            Debug.Assert(pDictRecord._msVR.Length == 2);
+            sTemp.Remove(i, pDictRecord._msVR.Length + 1);
 
             // set the name of the tag
-            pDictRecord->m_sName = sTemp;
+            pDictRecord._msName = sTemp;
         }
 
-
-        fclose(fp);
+        fp.Close();
 
 
         return true;
     }
 
-    CBBTDicomDictRecord* CBBTDicomDict::Find(unsigned short usGrp, unsigned short usEle)
+    DicomDictRecord Find(ushort usGrp, ushort usEle)
     {
 
         // find the specified Dicom tag by group and Element
-        register int i;
-        CBBTDicomDictRecord* pDictRecord = NULL;
-        for (i = 0; i < m_arrpRecord.GetSize(); i++)
+        int i;
+        DicomDictRecord pDictRecord = null;
+        //for (i = 0; i < m_arrpRecord.GetSize(); i++)
+        for (i = 0; i < m_arrpRecord.Count; i++)
         {
             pDictRecord = m_arrpRecord[i];
-            if (pDictRecord->m_usGrp == usGrp && pDictRecord->m_usEle == usEle)
+            if (pDictRecord._musGrp == usGrp && pDictRecord._musEle == usEle)
                 // find
                 return pDictRecord;
         }
 
         // not find
-        return NULL;
+        return null;
     }
 
     // Start is called before the first frame update

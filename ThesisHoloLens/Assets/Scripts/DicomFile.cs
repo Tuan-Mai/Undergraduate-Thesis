@@ -35,6 +35,8 @@ public class DicomFile : MonoBehaviour
     string _msPatientID;
     //CArray<DicomFileRecord*, DicomFileRecord*> _marrpRecord;
     List<DicomFileRecord> _marrpRecord=new List<DicomFileRecord>();
+
+    double _mulPixelDataLen;
     string _msFileName;
 
     bool _mbExplicitVR;
@@ -135,7 +137,12 @@ public class DicomFile : MonoBehaviour
         // element		- 2 bytes 
         int i;
         // fp.Read(szTag, 1, 4, fp);
-        fp.Read(szTag, 1, 4);
+        if ((i = fp.Read(szTag, 1, 4)) != 4)
+        {
+            if (fp.ReadByte() == -1) return true;
+
+            return false;
+        }
 
         pRecord._musGrp = (ushort)(szTag);
         pRecord._musEle = (ushort)(szTag + 2);
