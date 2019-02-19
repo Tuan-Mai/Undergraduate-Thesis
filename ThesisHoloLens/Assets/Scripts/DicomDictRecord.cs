@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class DicomDictRecord : MonoBehaviour
 {
-    ushort _musGrp = 0;
-	ushort m_usEle = 0;
-	string m_sName =null;
-	string _msVR=null;
-	string _msVM=null;
-	bool _mbRet = false;
+    public ushort _musGrp = 0;
+    public ushort m_usEle = 0;
+    public string m_sName =null;
+    public string _msVR =null;
+    public string _msVM =null;
+	public bool _mbRet = false;
 
     // Start is called before the first frame update
     void Start()

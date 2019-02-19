@@ -10,6 +10,7 @@ public class DicomDict : MonoBehaviour
     List<DicomDictRecord> m_arrpRecord;
 
     byte[] szTemp;
+    string sTemp;
 
     bool  Load(string sFileName)
     {
@@ -17,7 +18,7 @@ public class DicomDict : MonoBehaviour
         // the format of DICOM dictionary record
         // (9999 9999) name VR1 or VR2 VM RET
         szTemp= new byte[1024];
-        string sTemp;
+        
         DicomDictRecord pDictRecord;
         FileStream fp;
         int i;
@@ -49,15 +50,19 @@ public class DicomDict : MonoBehaviour
             // set group and element of the tag 
             sscanf(szTemp, "(%4hx,%4hx)", &pDictRecord->m_usGrp, &pDictRecord->m_usEle);
 
+
+            
+
             // set the rest info from the 12th character
-            sTemp.Format("%s", szTemp + 12);
+            sTemp = string.Format("%s", szTemp[12]);
+            
 
             // get the RET info
-            if (sTemp.Right(4) == " RET")
+            if (sTemp.Substring(4) == " RET")
             {
-                i = sTemp.GetLength();
-                pDictRecord->m_bRet = true;
-                sTemp.Delete(i - 4, 4);
+                i = sTemp.Length;
+                pDictRecord._mbRet = true;
+                sTemp.Remove(i - 4, 4);
             }
 
             // set the VM of the tag
