@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Text;
 using UnityEngine;
 
 public class DicomDict : MonoBehaviour
@@ -12,7 +14,7 @@ public class DicomDict : MonoBehaviour
     byte[] szTemp;
     string sTemp;
 
-    bool  Load(string sFileName)
+    public bool Load(string sFileName)
     {
 
         // the format of DICOM dictionary record
@@ -32,8 +34,10 @@ public class DicomDict : MonoBehaviour
 
         StreamReader sr = new StreamReader(fp);
 
-        //while (fp.Read(szTemp, 1, Marshal.SizeOf(szTemp)) != null)
-        while (sr.ReadLine() != null)
+        //while (fgets(szTemp, sizeof(szTemp), fp) != NULL) 
+
+        while (fp.Read(szTemp, 1, Marshal.SizeOf(szTemp)) != 0)
+        //while (sr.ReadLine() != null)
         {
 
 
@@ -48,17 +52,36 @@ public class DicomDict : MonoBehaviour
             m_arrpRecord.Add(pDictRecord);
 
             // set group and element of the tag 
-            sscanf(szTemp, "(%4hx,%4hx)", &pDictRecord->m_usGrp, &pDictRecord->m_usEle);
+            //sscanf(szTemp, "(%4hx,%4hx)", &pDictRecord->m_usGrp, &pDictRecord->m_usEle);
 
 
-            
+            // *** Test section for verification
+            byte[] temp = new byte[2];
+
+            Buffer.BlockCopy(szTemp, 0, temp, 0, 2);
+
+            pDictRecord._musGrp = Convert.ToUInt16(temp);
+
+            Buffer.BlockCopy(szTemp, 2, temp, 0, 2);
+
+            pDictRecord._musEle = Convert.ToUInt16(temp);
 
             // set the rest info from the 12th character
-            sTemp = string.Format("%s", szTemp[12]);
-            
+            //sTemp.Format("%s", szTemp + 12);
+
+            // set the rest info from the 12th character
+            //sTemp = string.Format("{0}", szTemp[12]);
+
+            var sb = new StringBuilder();
+            for (int index = 12; index <= szTemp.Length; index++)
+            {
+                sb.Append(String.Format("{0}", szTemp[index]));
+            }
+
+            sTemp = sb.ToString();
 
             // get the RET info
-            if (sTemp.Substring(4) == " RET")
+            if (sTemp.Substring(sTemp.Length - 4, 4) == " RET")
             {
                 i = sTemp.Length;
                 pDictRecord._mbRet = true;
@@ -66,12 +89,12 @@ public class DicomDict : MonoBehaviour
             }
 
             // set the VM of the tag
-            i = sTemp.ReverseFind(' ');
+            i = sTemp.LastIndexOf(' ');
             pDictRecord._msVM = sTemp.Substring(i + 1);
             sTemp.Remove(i, pDictRecord._msVM.Length + 1);
 
             // set the VR of the tag
-            i = sTemp.ReverseFind(' ');
+            i = sTemp.LastIndexOf(' ');
             pDictRecord._msVR = sTemp.Substring(i + 1);
             Debug.Assert(pDictRecord._msVR.Length == 2);
             sTemp.Remove(i, pDictRecord._msVR.Length + 1);
@@ -86,7 +109,7 @@ public class DicomDict : MonoBehaviour
         return true;
     }
 
-    DicomDictRecord Find(ushort usGrp, ushort usEle)
+    public DicomDictRecord Find(ushort usGrp, ushort usEle)
     {
 
         // find the specified Dicom tag by group and Element

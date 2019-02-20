@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using System;
 
 public class DicomFile : MonoBehaviour
 {
@@ -119,11 +120,25 @@ public class DicomFile : MonoBehaviour
                 bReadRecordOK = ReadRecord(fs, pRecord);
 
             }
+
+            fs.Close();
+
+            if(!bReadRecordOK)
+            {
+                return false;
+            }
+
+            GetDicomFileCTInfo();
+
+            return true;
         }
+
+        //return true;
     }
     bool ReadRecord(FileStream fp, DicomFileRecord pRecord){
+
         byte[] szTag = new byte[4];
-            byte[] szVR=new byte[3];
+        byte[] szVR=new byte[3];
         char[] pData;
 
 
@@ -144,93 +159,96 @@ public class DicomFile : MonoBehaviour
             return false;
         }
 
-        pRecord._musGrp = (ushort)(szTag);
-        pRecord._musEle = (ushort)(szTag + 2);
+        pRecord._musGrp = BitConverter.ToUInt16(szTag, 0);
+        pRecord._musEle = BitConverter.ToUInt16(szTag, 2);
         pRecord._musTagLen = 4;
 
    
 
-            if (pRecord->m_usGrp != 0x0002 && m_bExplicitVR == false)
+            if (pRecord._musGrp != 0x0002 && _mbExplicitVR == false)
             {
                 // data length	- 4 bytes
-                if (fread(&pRecord->m_ulLen, 1, 4, fp) != 4)
+                if (fp.Read(BitConverter.GetBytes(pRecord._mulLen), 1, 4) != 4)
                 {
                     return false;
                 }
-                pRecord->m_usTagLen += 4;
+                pRecord._musTagLen += 4;
             }
             else
             { // pRecord->m_usGrp == 0x0002 || m_bExplicitVR == true
               // group 0x0002 is always explicit VR
               // read VR
-                if (fread(szVR, 1, 2, fp) != 2)
+                if(fp.Read(szVR, 1, 2) != 2)
                 {
-                    BBTErrMsgBox("Failed to read DICOM tag (VR): \n" + m_sFileName);
+                    //BBTErrMsgBox("Failed to read DICOM tag (VR): \n" + m_sFileName);
                     return false;
                 }
-                pRecord->m_usTagLen += 2;
+                pRecord._musTagLen += 2;
 
-                szVR[2] = '\0';
-                pRecord->m_sVR.Format("%s", szVR);
+                szVR[2] = (byte)'\0';
+
+            pRecord._msVR = string.Format("{0}", szVR);
+            
 
                 // read data length
-                if (strcmp(szVR, "OB") == 0 ||
-                    strcmp(szVR, "OW") == 0 ||
-                    strcmp(szVR, "OF") == 0 ||
-                    strcmp(szVR, "SQ") == 0 ||
-                    strcmp(szVR, "UT") == 0 ||
-                    strcmp(szVR, "UN") == 0)
+                if (szVR.Equals("OB") ||
+                    szVR.Equals("OW") ||
+                    szVR.Equals("OF") ||
+                    szVR.Equals("SQ") ||
+                    szVR.Equals("UT") ||
+                    szVR.Equals("UN")) 
                 {
 
                     // skip unused 2 bytes
-                    fseek(fp, 2, SEEK_CUR);
-                    pRecord->m_usTagLen += 2;
+                fp.Seek(2, SeekOrigin.Current);
+                    pRecord._musTagLen += 2;
 
                     // read data length as unsigned long 
-                    if (fread(&pRecord->m_ulLen, 1, 4, fp) != 4)
+                    if (fp.Read(BitConverter.GetBytes(pRecord._mulLen), 1, 4) != 4)
                     {
-                        BBTErrMsgBox("Failed to read DICOM tag length: \n" + m_sFileName);
+                        //BBTErrMsgBox("Failed to read DICOM tag length: \n" + m_sFileName);
                         return false;
                     }
-                    pRecord->m_usTagLen += 4;
+                    pRecord._musTagLen += 4;
                 }
                 else
                 {
                     // read data length as unsigned short 
-                    unsigned short usLen;
-                    if (fread(&usLen, 1, 2, fp) != 2)
+                    ushort usLen = 0;
+
+                if (fp.Read(BitConverter.GetBytes(usLen), 1, 2) != 2)
                     {
                         return false;
                     }
-                    pRecord->m_ulLen = usLen;
-                    pRecord->m_usTagLen += 2;
+                    pRecord._mulLen = usLen;
+                    pRecord._musTagLen += 2;
                 }
             }
-        }
+        
 
 
         // find the record from Dicom dictionary
-        CBBTDicomDictRecord* pDictRecord = NULL;
-
+        DicomDictRecord pDictRecord = null;
+        DicomDict gpDicomDict = null;
 
         // only even groups are DICOM standard group
         // odd groups are private groups so 
         // So we find the group from DICOM dictionary only it is DICOM standard group 
-        if (pRecord->m_usGrp % 2 == 0)
+        if (pRecord._musGrp % 2 == 0)
         {
-            pDictRecord = gpDicomDict->Find(pRecord->m_usGrp, pRecord->m_usEle);
+            pDictRecord = gpDicomDict.Find(pRecord._musGrp, pRecord._musEle);
         }
 
         if (pDictRecord)
         {
             // set record name and VR 
-            pRecord->m_sName = pDictRecord->m_sName;
-            pRecord->m_sVR = pDictRecord->m_sVR;
+            pRecord._msName = pDictRecord._msName;
+            pRecord._msVR = pDictRecord._msVR;
 
 
-            if (pDictRecord->m_sVR == "SQ" || pDictRecord->m_sVR == "??" || pRecord->m_ulLen == 0)
+            if (pDictRecord._msVR == "SQ" || pDictRecord._msVR == "??" || pRecord._mulLen == 0)
             {
-                pRecord->m_pData = NULL;
+                pRecord._pData = null;
                 return true;
             }
         }
