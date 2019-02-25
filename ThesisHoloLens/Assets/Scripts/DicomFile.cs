@@ -75,7 +75,7 @@ public class DicomFile : MonoBehaviour
     List<DicomFileRecord> _marrpRecord = new List<DicomFileRecord>();
 
     double _mulPixelDataLen;
-    string _msFileName;
+    public string _msFileName;
 
     bool _mbExplicitVR;
 
@@ -110,7 +110,7 @@ public class DicomFile : MonoBehaviour
     }
 
 
-    bool Load(string sFileName)
+    public bool Load(string sFileName)
     {
         _msFileName = sFileName;
 
@@ -173,7 +173,7 @@ public class DicomFile : MonoBehaviour
 
         //return true;
     }
-    bool ReadRecord(FileStream fp, DicomFileRecord pRecord)
+    public bool ReadRecord(FileStream fp, DicomFileRecord pRecord)
     {
 
         byte[] szTag = new byte[4];
@@ -398,7 +398,7 @@ public class DicomFile : MonoBehaviour
         return true;
     }
 
-    DicomFileRecord FindRecord(ushort usGrp, ushort usEle)
+    public DicomFileRecord FindRecord(ushort usGrp, ushort usEle)
     {
         DicomFileRecord pRecord;
         int i;
@@ -415,7 +415,7 @@ public class DicomFile : MonoBehaviour
 
 
 
-    void GetDicomFileCTInfo()
+    public void GetDicomFileCTInfo()
     {
 
         int i, k;
@@ -491,30 +491,53 @@ public class DicomFile : MonoBehaviour
             // image position
             else if (pRecord._musGrp == 0x0020 && pRecord._musEle == 0x0032)
             {
+                //reads double 
                 //k = sscanf(pRecord._mpData, "%lf\\%lf\\%lf", _mdImgPos, _mdImgPos + 1, _mdImgPos + 2);
-                k = sscanf(pRecord._mpData, "%lf\\%lf\\%lf", _mdImgPos, _mdImgPos + 1, _mdImgPos + 2);
-                ASSERT(k == 3);
+                //k = sscanf(pRecord._mpData, "%lf\\%lf\\%lf", _mdImgPos, _mdImgPos + 1, _mdImgPos + 2);
+                
+                _mdImgPos[0] = BitConverter.ToDouble(pRecord._mpData, 0);
+                _mdImgPos[1] = BitConverter.ToDouble(pRecord._mpData, 8);
+                _mdImgPos[2] = BitConverter.ToDouble(pRecord._mpData, 16);
+                k = 3;
+
+                Debug.Assert(k == 3);
             }
             // slice location
             else if (pRecord._musGrp == 0x0020 && pRecord._musEle == 0x1041)
             {
-                k = sscanf(pRecord._mpData, "%lf", &_mdSliceLocation);
-                ASSERT(k == 1);
+
+                //k = sscanf(pRecord._mpData, "%lf", &_mdSliceLocation);
+                //k = sscanf(pRecord._mpData, "%lf", &_mdSliceLocation);
+                //_mdSliceLocation = Int32.Parse(pRecord._mpData[0]);
+                _mdSliceLocation = BitConverter.ToDouble(pRecord._mpData, 0);
+                k = 1;
+
+                Debug.Assert(k == 1);
             }
             // slice thinkness
             else if (pRecord._musGrp == 0x0018 && pRecord._musEle == 0x0050)
             {
-                k = sscanf(pRecord._mpData, "%lf", &_mdSliceThickness);
+                //k = sscanf(pRecord._mpData, "%lf", &_mdSliceThickness);
+                _mdSliceThickness = BitConverter.ToDouble(pRecord._mpData, 0);
                 _mdSliceThicknessOriginal = _mdSliceThickness;
                 m_dZdistance = _mdSliceThickness;  //add on oct 29,2007
-                ASSERT(k == 1);
+                k = 1;
+
+                Debug.Assert(k == 1);
             }
             // image XY pixel spacing
             else if (pRecord._musGrp == 0x0028 && pRecord._musEle == 0x0030)
             {
-                k = sscanf(pRecord._mpData, "%lf\\%lf", &_mdImgXPixelSpacing, &_mdImgYPixelSpacing);
-                ASSERT(k == 2);
+                //k = sscanf(pRecord._mpData, "%lf\\%lf", &_mdImgXPixelSpacing, &_mdImgYPixelSpacing);
+                _mdImgXPixelSpacing = BitConverter.ToDouble(pRecord._mpData, 0);
+                _mdImgYPixelSpacing = BitConverter.ToDouble(pRecord._mpData, 8);
+
+                k = 2;
+
+                Debug.Assert(k == 2);
             }
+
+            /*
             // Window center
             else if (pRecord._musGrp == 0x0028 && pRecord._musEle == 0x1050)
             {
@@ -527,6 +550,9 @@ public class DicomFile : MonoBehaviour
                 k = sscanf(pRecord._mpData, "%lf", &_mdWinWidth);
                 ASSERT(k == 1);
             }
+            */
+
+
             // Pixel data (7FE0,0010)
             else if (pRecord._musGrp == 0x7FE0 && pRecord._musEle == 0x0010)
             {
@@ -534,10 +560,13 @@ public class DicomFile : MonoBehaviour
                 m_ulPixelDataLen = pRecord._mulLen;
                 m_pPixelData = pRecord._mpData;
             }
+
+            /*
             // table height (0018,1130)
             else if (pRecord._musGrp == 0x0018 && pRecord._musEle == 0x1130)
             {
             }
+            */
         }
     }
 
