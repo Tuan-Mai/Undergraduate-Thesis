@@ -301,7 +301,9 @@ public class DicomFile : MonoBehaviour
         }
 
         // read the data
-        pData = BitConverter.GetBytes(pRecord._mulLen + 1);
+        pData = new byte[pRecord._mulLen + 1];
+        pData = BitConverter.GetBytes(pRecord._mulLen);
+
         if (pData != null)
         {
             //BBTErrMsgBox("Out of Memmory!: Read DICOM data!");
@@ -317,7 +319,7 @@ public class DicomFile : MonoBehaviour
         // 
         // set data pointer
         pRecord._mpData = pData;
-        *(pData + pRecord._mulLen) = 0;
+        pData[pRecord._mulLen] = 0;
 
         //jctest
         //	if (pRecord._musGrp == 0x0008 && (pRecord._musEle == 0x0000 || pRecord._musEle == 0x0001)) {
