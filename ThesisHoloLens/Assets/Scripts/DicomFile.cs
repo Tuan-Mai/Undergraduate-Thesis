@@ -79,6 +79,8 @@ public class DicomFile : MonoBehaviour
 
     bool _mbExplicitVR;
 
+    byte[] fileData;
+
     void Init()
     {
         _miDicomFileType = 0;
@@ -110,12 +112,14 @@ public class DicomFile : MonoBehaviour
     }
 
 
-    public bool Load(string sFileName)
+    //public bool Load(string sFileName)
+    public bool Load()
     {
-        _msFileName = sFileName;
+        //_msFileName = sFileName;
+        _msFileName = "CT002000004.dcm";
 
         //TODO: set filename to the end of path 
-        string path = "Assets/Datasets/CTDataset1/CT002000020.dcm";
+        string path = "Assets/Datasets/CTDataset1/" + _msFileName;
 
 
         if (!File.Exists(path))
@@ -123,12 +127,15 @@ public class DicomFile : MonoBehaviour
             return false;
         }
 
+        //using (BinaryReader br = new BinaryReader(File.Open(path, FileMode.Open)))
         using (FileStream fs = File.Open(path, FileMode.Open, FileAccess.Read))
         {
-            string sFileType = _msFileName.Substring(3);
-            sFileType.ToUpper();
+            fileData = new byte[fs.Length];
 
-            if (sFileType == "DCM")
+            string sFileType = _msFileName.Substring(_msFileName.Length - 3, 3);
+            //sFileType.ToUpper();
+
+            if (sFileType == "dcm")
             {
                 // skip first 128 + 4 bytes
                 fs.Seek(132, SeekOrigin.Begin);
@@ -146,10 +153,13 @@ public class DicomFile : MonoBehaviour
             // read all records until end
             bool bReadRecordOK = true;
             DicomFileRecord pRecord = new DicomFileRecord();
+            int bytesToRead = fileData.Length;
 
-            while ((fs.ReadByte() > -1) && bReadRecordOK)
+            //int temp = fs.ReadByte();
+
+            while ((fs.Position < fs.Length + 1) && bReadRecordOK)
             {
-
+                //fs.Read(fileData, 0, bytesToRead);
                 // add record to the record list
                 //pRecord = new DicomFileRecord;
                 _marrpRecord.Add(pRecord);
@@ -160,10 +170,11 @@ public class DicomFile : MonoBehaviour
 
             fs.Close();
 
+            /*
             if (!bReadRecordOK)
             {
                 return false;
-            }
+            }*/
 
             // switch case 3
             GetDicomFileCTInfo();
@@ -176,27 +187,46 @@ public class DicomFile : MonoBehaviour
     public bool ReadRecord(FileStream fp, DicomFileRecord pRecord)
     {
 
-        byte[] szTag = new byte[4];
+        byte[] szTag = new byte[5];
         byte[] szVR = new byte[3];
         byte[] pData;
 
 
 
-
         // set the position of the tag 
-        //   pRecord->m_iFilePos = ftell(fp);
+        //pRecord._miFilePos = ftell(fp);
+        pRecord._miFilePos = fp.Position;
+
+        
 
         // read group and element 
         // group		- 2 bytes 
         // element		- 2 bytes 
         int i;
         // fp.Read(szTag, 1, 4, fp);
-        if ((i = fp.Read(szTag, 1, 4)) != 4)
+        //if ((i = fp.Read(szTag, 1, 4)) != 4)
+
+        /*
+        if ((i = fp.Read(fileData, 1, 4)) != 4)
         {
-            if (fp.ReadByte() == -1) return true;
+            if (i == 0) return true;
 
             return false;
         }
+        */
+
+        int numBytesToRead = 4;
+
+        BinaryReader br = new BinaryReader(fp);
+
+        //szTag = br.ReadBytes(5);
+
+        br.Read(szTag, 1, 4);
+
+        //fp.Read(szTag, 0, szTag.Length);
+
+        //fp.Read(szTag, 1, 4);
+        //fp.Write(szTag, 0, 4);
 
         pRecord._musGrp = BitConverter.ToUInt16(szTag, 0);
         pRecord._musEle = BitConverter.ToUInt16(szTag, 2);
@@ -204,23 +234,33 @@ public class DicomFile : MonoBehaviour
 
 
 
-        if (pRecord._musGrp != 0x0002 && _mbExplicitVR == false)
+        //if (pRecord._musGrp != 0x0002 && _mbExplicitVR == false)
+        //{
+        // data length	- 4 bytes
+
+        byte[] tmp = br.ReadBytes(4);
+
+        //int tmp = fp.Read(BitConverter.GetBytes(pRecord._mulLen), 1, 4);
+            //if (fp.Read(BitConverter.GetBytes(pRecord._mulLen), 1, 4) != 4)
+        if ( tmp.Length != 4)    
         {
-            // data length	- 4 bytes
-            if (fp.Read(BitConverter.GetBytes(pRecord._mulLen), 1, 4) != 4)
-            {
-                return false;
+                //return false;
+
             }
-            pRecord._musTagLen += 4;
-        }
-        else
-        { // pRecord._musGrp == 0x0002 || m_bExplicitVR == true
+            //pRecord._musTagLen += 4; 
+
+       // }
+
+        
+
+       // else
+        //{ // pRecord._musGrp == 0x0002 || m_bExplicitVR == true
           // group 0x0002 is always explicit VR
           // read VR
             if (fp.Read(szVR, 1, 2) != 2)
             {
                 //BBTErrMsgBox("Failed to read DICOM tag (VR): \n" + m_sFileName);
-                return false;
+                //return false;
             }
             pRecord._musTagLen += 2;
 
@@ -245,6 +285,8 @@ public class DicomFile : MonoBehaviour
                 // read data length as unsigned long 
                 if (fp.Read(BitConverter.GetBytes(pRecord._mulLen), 1, 4) != 4)
                 {
+                    
+                    
                     //BBTErrMsgBox("Failed to read DICOM tag length: \n" + m_sFileName);
                     return false;
                 }
@@ -262,7 +304,7 @@ public class DicomFile : MonoBehaviour
                 pRecord._mulLen = usLen;
                 pRecord._musTagLen += 2;
             }
-        }
+       // }
 
 
 
@@ -430,6 +472,12 @@ public class DicomFile : MonoBehaviour
         {
             pRecord = _marrpRecord[i];
 
+            _mdImgPos[0] = BitConverter.ToDouble(pRecord._mpData, 0);
+            _mdImgPos[1] = BitConverter.ToDouble(pRecord._mpData, 8);
+            _mdImgPos[2] = BitConverter.ToDouble(pRecord._mpData, 16);
+
+
+
             // instance number (image number)
             if (pRecord._musGrp == 0x0020 && pRecord._musEle == 0x0013)
             {
@@ -582,9 +630,10 @@ public class DicomFile : MonoBehaviour
 
 
     // Start is called before the first frame update
-    void Start()
+    public void Start()
     {
-
+        Init();
+        Load();
     }
 
     // Update is called once per frame

@@ -6,7 +6,7 @@ public class DicomReader : MonoBehaviour
 {
 
     DicomFile[] m_arrpDicomFileList;
-
+    /*
     bool LoadAllDicomFile()
     {
 
@@ -170,6 +170,8 @@ public class DicomReader : MonoBehaviour
         return true;
         return true;
     }
+
+    */
     // Start is called before the first frame update
     void Start()
     {
