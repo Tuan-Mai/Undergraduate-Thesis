@@ -114,7 +114,7 @@ public class DicomDict : MonoBehaviour
 
         // find the specified Dicom tag by group and Element
         int i;
-        DicomDictRecord pDictRecord = null;
+        DicomDictRecord pDictRecord = new DicomDictRecord();
         //for (i = 0; i < m_arrpRecord.GetSize(); i++)
         for (i = 0; i < m_arrpRecord.Count; i++)
         {
