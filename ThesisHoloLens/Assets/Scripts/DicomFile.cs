@@ -78,7 +78,7 @@ public class DicomFile : MonoBehaviour
     public string _msFileName;
 
     bool _mbExplicitVR;
-    
+
     void Init()
     {
         _miDicomFileType = 0;
@@ -151,7 +151,7 @@ public class DicomFile : MonoBehaviour
             bool bReadRecordOK = true;
             DicomFileRecord pRecord;
 
-            
+
             while ((fs.BaseStream.Position < fs.BaseStream.Length) && bReadRecordOK)
             {
                 //fs.Read(fileData, 0, bytesToRead);
@@ -162,7 +162,7 @@ public class DicomFile : MonoBehaviour
                 bReadRecordOK = ReadRecord(fs, pRecord);
 
             }
-            
+
 
             fs.Close();
 
@@ -233,12 +233,13 @@ public class DicomFile : MonoBehaviour
 
             byte[] tmpByte = new byte[4];
             i = br.Read(tmpByte, 0, 4);
-            pRecord._mulLen = BitConverter.ToUInt16(tmpByte, 0);
 
             if (i != 4)
             {
                 return false;
             }
+
+            pRecord._mulLen = BitConverter.ToUInt16(tmpByte, 0);
 
             pRecord._musTagLen += 4;
 
@@ -246,7 +247,7 @@ public class DicomFile : MonoBehaviour
 
 
 
-        else 
+        else
         { // pRecord._musGrp == 0x0002 || m_bExplicitVR == true
           // group 0x0002 is always explicit VR
           // read VR
@@ -254,7 +255,6 @@ public class DicomFile : MonoBehaviour
             {
                 //BBTErrMsgBox("Failed to read DICOM tag (VR): \n" + m_sFileName);
                 return false;
-                Debug.Log("!= 2");
             }
 
             pRecord._musTagLen += 2;
@@ -275,56 +275,55 @@ public class DicomFile : MonoBehaviour
                 szVR.Equals("UT") ||
                 szVR.Equals("UN"))
             {
-                    // skip unused 2 bytes
-                    br.BaseStream.Seek(2, SeekOrigin.Current);
-                    pRecord._musTagLen += 2;
+                // skip unused 2 bytes
+                br.BaseStream.Seek(2, SeekOrigin.Current);
+                pRecord._musTagLen += 2;
 
-                    // Check to see if this accepts the new seek
-                    //br = new BinaryReader(fp);
+                // Check to see if this accepts the new seek
+                //br = new BinaryReader(fp);
 
-                    byte[] tempByte = new byte[4];
-                    // read data length as unsigned long 
-                    //if (br.Read(BitConverter.GetBytes(pRecord._mulLen), 1, 4) != 4)
-                    br.Read(tempByte, 0, 4);
+                byte[] tempByte = new byte[4];
+                // read data length as unsigned long 
+                //if (br.Read(BitConverter.GetBytes(pRecord._mulLen), 1, 4) != 4)
+                i = br.Read(tempByte, 0, 4);
 
-                    pRecord._mulLen = BitConverter.ToUInt32(tempByte, 0);
-
-                    /*
-                    {
-
-                        Debug.Log("!= 4");
-                        //BBTErrMsgBox("Failed to read DICOM tag length: \n" + m_sFileName);
-                        //return false;
-                    }
-                    */
-                    pRecord._musTagLen += 4;
+                if (i != 4)
+                {
+                    // Failed to read Dicom tag length
+                    return false;
                 }
 
-                else
-                {
-                    // read data length as unsigned short 
-                    ushort usLen = 0;
+                pRecord._mulLen = BitConverter.ToUInt32(tempByte, 0);
 
-                
-                    byte[] tempByte = new byte[2];
-                    i = br.Read(tempByte, 0, 2);
-                if ( i != 2)
+                pRecord._musTagLen += 4;
+            }
+
+            else
+            {
+                // read data length as unsigned short 
+                ushort usLen = 0;
+
+
+                byte[] tempByte = new byte[2];
+                i = br.Read(tempByte, 0, 2);
+
+                if (i != 2)
                 {
                     return false;
                 }
 
-                    usLen = BitConverter.ToUInt16(tempByte, 0);
+                usLen = BitConverter.ToUInt16(tempByte, 0);
 
-                    pRecord._mulLen = usLen;
-                    pRecord._musTagLen += 2;
-                }
-            
+                pRecord._mulLen = usLen;
+                pRecord._musTagLen += 2;
+            }
+
         }
 
 
         // find the record from Dicom dictionary
         DicomDictRecord pDictRecord = new DicomDictRecord();
-        
+
 
         // only even groups are DICOM standard group
         // odd groups are private groups so 
@@ -380,8 +379,16 @@ public class DicomFile : MonoBehaviour
         }
         */
 
-        br.Read(pData, 0, (int)pRecord._mulLen);
-        
+        if (br.Read(pData, 0, (int)pRecord._mulLen) != (int)pRecord._mulLen)
+        {
+            // Failed to read Dicom
+            // Delete pData
+            //pData
+            return false;
+        }
+
+        //br.Read(pData, 0, (int)pRecord._mulLen);
+
         // 
         // set data pointer
         pRecord._mpData = pData;
