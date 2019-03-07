@@ -6,9 +6,9 @@ public class DicomDictRecord : MonoBehaviour
 {
     public ushort _musGrp = 0;
     public ushort _musEle = 0;
-    public string _msName =null;
-    public string _msVR =null;
-    public string _msVM =null;
+    public string _msName = "";
+    public string _msVR = "";
+    public string _msVM = "";
 	public bool _mbRet = false;
 
     // Start is called before the first frame update

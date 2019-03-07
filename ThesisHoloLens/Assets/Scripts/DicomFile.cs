@@ -125,6 +125,8 @@ public class DicomFile : MonoBehaviour
             return false;
         }
 
+        //gpDicomDict.Load(_msFileName);
+
         //using (BinaryReader br = new BinaryReader(File.Open(path, FileMode.Open)))
         using (BinaryReader fs = new BinaryReader(File.Open(path, FileMode.Open, FileAccess.Read)))
         {
@@ -146,12 +148,13 @@ public class DicomFile : MonoBehaviour
                 _mbExplicitVR = false;
             }
 
+            
 
             // read all records until end
             bool bReadRecordOK = true;
             DicomFileRecord pRecord;
 
-
+           
             while ((fs.BaseStream.Position < fs.BaseStream.Length) && bReadRecordOK)
             {
                 //fs.Read(fileData, 0, bytesToRead);
@@ -268,12 +271,12 @@ public class DicomFile : MonoBehaviour
 
             // read data length
 
-            if (szVR.Equals("OB") ||
-                szVR.Equals("OW") ||
-                szVR.Equals("OF") ||
-                szVR.Equals("SQ") ||
-                szVR.Equals("UT") ||
-                szVR.Equals("UN"))
+            if (pRecord._msVR.Equals("OB") ||
+                pRecord._msVR.Equals("OW") ||
+                pRecord._msVR.Equals("OF") ||
+                pRecord._msVR.Equals("SQ") ||
+                pRecord._msVR.Equals("UT") ||
+                pRecord._msVR.Equals("UN"))
             {
                 // skip unused 2 bytes
                 br.BaseStream.Seek(2, SeekOrigin.Current);
