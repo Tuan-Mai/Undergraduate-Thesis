@@ -79,6 +79,8 @@ public class DicomFile : MonoBehaviour
 
     bool _mbExplicitVR;
 
+    string tempString = "";
+
     void Init()
     {
         _miDicomFileType = 0;
@@ -107,6 +109,7 @@ public class DicomFile : MonoBehaviour
 
         _msFileName = null;//Empty();
 
+        gpDicomDict.Load("DICOM_Dictionary.txt");
     }
 
 
@@ -114,7 +117,7 @@ public class DicomFile : MonoBehaviour
     public bool Load()
     {
         //_msFileName = sFileName;
-        _msFileName = "CT002000004.dcm";
+        _msFileName = "CT002000006.dcm";
 
         //TODO: set filename to the end of path 
         string path = "Assets/Datasets/CTDataset1/" + _msFileName;
@@ -126,6 +129,28 @@ public class DicomFile : MonoBehaviour
         }
 
         //gpDicomDict.Load(_msFileName);
+
+        using (BinaryReader fs = new BinaryReader(File.Open(path, FileMode.Open, FileAccess.Read)))
+        {
+
+            string sFileType = _msFileName.Substring(_msFileName.Length - 3, 3);
+            //sFileType.ToUpper();
+
+            if (sFileType == "dcm")
+            {
+                // skip first 128 + 4 bytes
+                fs.BaseStream.Seek(132, SeekOrigin.Begin);
+
+                // take DICOM file as explicit VR by default
+                _mbExplicitVR = true;
+            }
+
+            byte[] tempByte = new byte[fs.BaseStream.Length];
+            fs.Read(tempByte, 0, tempByte.Length);
+            tempString = System.Text.Encoding.UTF8.GetString(tempByte, 0, tempByte.Length);
+
+            fs.Close();
+        }
 
         //using (BinaryReader br = new BinaryReader(File.Open(path, FileMode.Open)))
         using (BinaryReader fs = new BinaryReader(File.Open(path, FileMode.Open, FileAccess.Read)))
@@ -154,6 +179,7 @@ public class DicomFile : MonoBehaviour
             bool bReadRecordOK = true;
             DicomFileRecord pRecord;
 
+            
            
             while ((fs.BaseStream.Position < fs.BaseStream.Length) && bReadRecordOK)
             {
@@ -230,7 +256,7 @@ public class DicomFile : MonoBehaviour
 
 
 
-        if (pRecord._musGrp != 0x0002 && _mbExplicitVR == false)
+        if (pRecord._musGrp != 2 && _mbExplicitVR == false)
         {
             // data length	- 4 bytes
 
@@ -242,7 +268,7 @@ public class DicomFile : MonoBehaviour
                 return false;
             }
 
-            pRecord._mulLen = BitConverter.ToUInt16(tmpByte, 0);
+            pRecord._mulLen = BitConverter.ToUInt32(tmpByte, 0);
 
             pRecord._musTagLen += 4;
 
@@ -250,7 +276,7 @@ public class DicomFile : MonoBehaviour
 
 
 
-        else
+        else if (pRecord._musGrp == 0x0002 && _mbExplicitVR == true)
         { // pRecord._musGrp == 0x0002 || m_bExplicitVR == true
           // group 0x0002 is always explicit VR
           // read VR
@@ -281,9 +307,6 @@ public class DicomFile : MonoBehaviour
                 // skip unused 2 bytes
                 br.BaseStream.Seek(2, SeekOrigin.Current);
                 pRecord._musTagLen += 2;
-
-                // Check to see if this accepts the new seek
-                //br = new BinaryReader(fp);
 
                 byte[] tempByte = new byte[4];
                 // read data length as unsigned long 
@@ -346,13 +369,15 @@ public class DicomFile : MonoBehaviour
             pRecord._msName = pDictRecord._msName;
             pRecord._msVR = pDictRecord._msVR;
 
-            if (pDictRecord._msVR == "SQ" || pDictRecord._msVR == "??" || pRecord._mulLen == 0)
+        */
+            //if (pDictRecord._msVR == "SQ" || pDictRecord._msVR == "??" || pRecord._mulLen == 0)
+            if (pRecord._mulLen == 0)
             {
                 pRecord._mpData = null;
                 return true;
             }
-        }
-        */
+        
+        
 
         // set data length to zero if length is 0xFFFFFFFF (undefined length please see DICOM standard)
         if (pRecord._mulLen == 0xFFFFFFFF)
