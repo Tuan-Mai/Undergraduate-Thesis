@@ -69,11 +69,11 @@ public class DicomDict : MonoBehaviour
             // *** Test section for verification
             byte[] temp = new byte[2];
 
-            Buffer.BlockCopy(szTemp, 0, temp, 0, 2);
+            Buffer.BlockCopy(szTemp, 1, temp, 0, 2);
 
             pDictRecord._musGrp = BitConverter.ToUInt16(temp, 0);
 
-            Buffer.BlockCopy(szTemp, 2, temp, 0, 2);
+            Buffer.BlockCopy(szTemp, 4, temp, 0, 2);
 
             pDictRecord._musEle = BitConverter.ToUInt16(temp, 0);
 
