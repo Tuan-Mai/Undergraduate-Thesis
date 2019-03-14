@@ -10,6 +10,7 @@ public class DicomDictRecord : MonoBehaviour
     public string _msVR = "";
     public string _msVM = "";
 	public bool _mbRet = false;
+    public bool _isNotNull = false;
 
     // Start is called before the first frame update
     void Start()

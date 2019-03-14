@@ -236,16 +236,42 @@ public class DicomDict : MonoBehaviour
         int i;
         DicomDictRecord pDictRecord = new DicomDictRecord();
         //for (i = 0; i < _marrpRecord.GetSize(); i++)
+        
         for (i = 0; i < _marrpRecord.Count; i++)
         {
             pDictRecord = _marrpRecord[i];
+
             if (pDictRecord._musGrp == usGrp && pDictRecord._musEle == usEle)
+            {
+                pDictRecord._isNotNull = true;
                 // find
                 return pDictRecord;
+            }
+
+            else
+            {
+                continue;
+            }
         }
 
+        /*
+        foreach (DicomDictRecord pDictRecordCheck in _marrpRecord)
+        {
+            if (pDictRecord._musGrp == usGrp && pDictRecord._musEle == usEle)
+            {// find
+                return pDictRecord;
+            }
+
+            else
+            {
+                continue;
+            }
+        }
+        */
+
+        pDictRecord._isNotNull = false;
         // not find
-        return null;
+        return pDictRecord;
     }
 
     // Start is called before the first frame update

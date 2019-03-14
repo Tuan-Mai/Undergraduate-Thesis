@@ -1613,54 +1613,54 @@
 (2010,0520) Referenced Basic Annotation Box Sequence SQ 1 
 (2020,0010) Image Position US 1 
 (2020,0020) Polarity CS 1 
-(2020,0030) Requested Image Size DS 1
-(2020,0040) Requested Decimate/Crop Behavior CS 1
-(2020,0050) Requested Resolution ID CS 1
-(2020,00A0) Requested Image Size Flag CS 1
-(2020,00A2) Decimate/Crop Result CS 1
-(2020,0110) Basic Grayscale Image Sequence SQ 1
-(2020,0111) Basic Color Image Sequence SQ 1
-(2020,0130) Referenced Image Overlay Box Sequence SQ 1 RET
-(2020,0140) Referenced VOI LUT Box Sequence SQ 1 RET
-(2030,0010) Annotation Position US 1
+(2020,0030) Requested Image Size DS 1 
+(2020,0040) Requested Decimate/Crop Behavior CS 1 
+(2020,0050) Requested Resolution ID CS 1 
+(2020,00A0) Requested Image Size Flag CS 1 
+(2020,00A2) Decimate/Crop Result CS 1 
+(2020,0110) Basic Grayscale Image Sequence SQ 1 
+(2020,0111) Basic Color Image Sequence SQ 1 
+(2020,0130) Referenced Image Overlay Box Sequence SQ 1 RET 
+(2020,0140) Referenced VOI LUT Box Sequence SQ 1 RET 
+(2030,0010) Annotation Position US 1 
 (2030,0020) Text String LO 1 
 (2040,0010) Referenced Overlay Plane Sequence SQ 1 RET 
 (2040,0011) Referenced Overlay Plane Groups US 1-99 RET 
-(2040,0020) Overlay Pixel Data Sequence SQ 1 RET
-(2040,0060) Overlay Magnification Type CS 1 RET
-(2040,0070) Overlay Smoothing Type CS 1 RET
-(2040,0072) Overlay or Image Magnification CS 1 RET
+(2040,0020) Overlay Pixel Data Sequence SQ 1 RET 
+(2040,0060) Overlay Magnification Type CS 1 RET 
+(2040,0070) Overlay Smoothing Type CS 1 RET 
+(2040,0072) Overlay or Image Magnification CS 1 RET 
 (2040,0074) Magnify to Number of Columns US 1 RET 
-(2040,0080) Overlay Foreground Density CS 1 RET
-(2040,0082) Overlay Background Density CS 1 RET
-(2040,0090) Overlay Mode CS 1 RET
-(2040,0100) Threshold Density CS 1 RET
-(2040,0500) Referenced Image Box Sequence SQ 1 RET
-(2050,0010) Presentation LUT Sequence SQ 1
-(2050,0020) Presentation LUT Shape CS 1
+(2040,0080) Overlay Foreground Density CS 1 RET 
+(2040,0082) Overlay Background Density CS 1 RET 
+(2040,0090) Overlay Mode CS 1 RET 
+(2040,0100) Threshold Density CS 1 RET 
+(2040,0500) Referenced Image Box Sequence SQ 1 RET 
+(2050,0010) Presentation LUT Sequence SQ 1 
+(2050,0020) Presentation LUT Shape CS 1 
 (2050,0500) Referenced Presentation LUT Sequence SQ 1 
-(2100,0010) Print Job ID SH 1
-(2100,0020) Execution Status CS 1
-(2100,0030) Execution Status Info CS 1
-(2100,0040) Creation Date DA 1
-(2100,0050) Creation Time TM 1
-(2100,0070) Originator AE 1
-(2100,0140) Destination AE 1
-(2100,0160) Owner ID SH 1
-(2100,0170) Number of Films IS 1
-(2100,0500) Referenced Print Job Sequence (Pull Stored Print) SQ 1 RET
-(2110,0010) Printer Status CS 1
+(2100,0010) Print Job ID SH 1 
+(2100,0020) Execution Status CS 1 
+(2100,0030) Execution Status Info CS 1 
+(2100,0040) Creation Date DA 1 
+(2100,0050) Creation Time TM 1 
+(2100,0070) Originator AE 1 
+(2100,0140) Destination AE 1 
+(2100,0160) Owner ID SH 1 
+(2100,0170) Number of Films IS 1 
+(2100,0500) Referenced Print Job Sequence (Pull Stored Print) SQ 1 RET 
+(2110,0010) Printer Status CS 1 
 (2110,0020) Printer Status Info CS 1 
-(2110,0030) Printer Name LO 1
-(2110,0099) Print Queue ID SH 1 RET
+(2110,0030) Printer Name LO 1 
+(2110,0099) Print Queue ID SH 1 RET 
 (2120,0010) Queue Status CS 1 RET 
-(2120,0050) Print Job Description Sequence SQ 1 RET
-(2120,0070) Referenced Print Job Sequence SQ 1 RET
-(2130,0010) Print Management Capabilities Sequence SQ 1 RET
-(2130,0015) Printer Characteristics Sequence SQ 1 RET
-(2130,0030) Film Box Content Sequence SQ 1 RET
-(2130,0040) Image Box Content Sequence SQ 1 RET
-(2130,0050) Annotation Content Sequence SQ 1 RET
+(2120,0050) Print Job Description Sequence SQ 1 RET 
+(2120,0070) Referenced Print Job Sequence SQ 1 RET 
+(2130,0010) Print Management Capabilities Sequence SQ 1 RET 
+(2130,0015) Printer Characteristics Sequence SQ 1 RET 
+(2130,0030) Film Box Content Sequence SQ 1 RET 
+(2130,0040) Image Box Content Sequence SQ 1 RET 
+(2130,0050) Annotation Content Sequence SQ 1 RET 
 (2130,0060) Image Overlay Box Content Sequence SQ 1 RET 
 (2130,0080) Presentation LUT Content Sequence SQ 1 RET 
 (2130,00A0) Proposed Study Sequence SQ 1 RET 

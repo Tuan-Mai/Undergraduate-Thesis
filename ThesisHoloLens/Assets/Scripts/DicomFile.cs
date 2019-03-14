@@ -4,6 +4,7 @@ using UnityEngine;
 using System.IO;
 using System;
 using System.Text;
+using System.Globalization;
 
 public class DicomFile : MonoBehaviour
 {
@@ -117,7 +118,7 @@ public class DicomFile : MonoBehaviour
     public bool Load()
     {
         //_msFileName = sFileName;
-        _msFileName = "CT002000006.dcm";
+        _msFileName = "CT002000001.dcm";
 
         //TODO: set filename to the end of path 
         string path = "Assets/Datasets/CTDataset1/" + _msFileName;
@@ -130,6 +131,7 @@ public class DicomFile : MonoBehaviour
 
         //gpDicomDict.Load(_msFileName);
 
+        
         using (BinaryReader fs = new BinaryReader(File.Open(path, FileMode.Open, FileAccess.Read)))
         {
 
@@ -151,6 +153,7 @@ public class DicomFile : MonoBehaviour
 
             fs.Close();
         }
+        
 
         //using (BinaryReader br = new BinaryReader(File.Open(path, FileMode.Open)))
         using (BinaryReader fs = new BinaryReader(File.Open(path, FileMode.Open, FileAccess.Read)))
@@ -250,13 +253,12 @@ public class DicomFile : MonoBehaviour
 
         //br.Read(szTag, 0, 4);
 
+
         pRecord._musGrp = BitConverter.ToUInt16(szTag, 0);
         pRecord._musEle = BitConverter.ToUInt16(szTag, 2);
         pRecord._musTagLen = 4;
 
-
-
-        if (pRecord._musGrp != 2 && _mbExplicitVR == false)
+        if (pRecord._musGrp != Convert.ToUInt16("0x0002", 16) && _mbExplicitVR == false)
         {
             // data length	- 4 bytes
 
@@ -276,7 +278,7 @@ public class DicomFile : MonoBehaviour
 
 
 
-        else if (pRecord._musGrp == 0x0002 && _mbExplicitVR == true)
+        else
         { // pRecord._musGrp == 0x0002 || m_bExplicitVR == true
           // group 0x0002 is always explicit VR
           // read VR
@@ -354,14 +356,15 @@ public class DicomFile : MonoBehaviour
         // only even groups are DICOM standard group
         // odd groups are private groups so 
         // So we find the group from DICOM dictionary only it is DICOM standard group 
+       
         
-        if (pRecord._musGrp != 0x0002 && pRecord._musGrp % 2 == 0)
+        if (pRecord._musGrp % 2 == 0)
         {
             pDictRecord = gpDicomDict.Find(pRecord._musGrp, pRecord._musEle);
         }
 
 
-        if (pDictRecord)
+        if (pDictRecord._isNotNull == true)
 
         //if (_marrpRecord != null)
         {
@@ -381,7 +384,7 @@ public class DicomFile : MonoBehaviour
         
 
         // set data length to zero if length is 0xFFFFFFFF (undefined length please see DICOM standard)
-        if (pRecord._mulLen == 0xFFFFFFFF)
+        if (pRecord._mulLen == Convert.ToUInt64("0xFFFFFFFF", 16))
         {
             pRecord._mulLen = 0;
             pRecord._mpData = null;
@@ -421,6 +424,8 @@ public class DicomFile : MonoBehaviour
         // 
         // set data pointer
         pRecord._mpData = pData;
+        string mpDataString = Encoding.Default.GetString(pRecord._mpData);
+
         pData[pRecord._mulLen] = 0;
 
         //jctest
@@ -430,9 +435,11 @@ public class DicomFile : MonoBehaviour
         //jctest
 
         // check if it is Explict VR or Implicit VR
-        if (pRecord._musGrp == 0x0002 && pRecord._musEle == 0x0010)
+        if (pRecord._musGrp == Convert.ToUInt16("0x0002", 16) && pRecord._musEle == Convert.ToUInt16("0x0010", 16))
         {
-            if (pRecord._mpData.Equals("1.2.840.10008.1.2"))
+            string dataString = Encoding.Default.GetString(pRecord._mpData);
+
+            if (dataString.Equals("1.2.840.10008.1.2\0\0"))
             {
                 _mbExplicitVR = false;
             }
