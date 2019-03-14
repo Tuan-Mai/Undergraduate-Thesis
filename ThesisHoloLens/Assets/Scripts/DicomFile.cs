@@ -354,28 +354,29 @@ public class DicomFile : MonoBehaviour
         // only even groups are DICOM standard group
         // odd groups are private groups so 
         // So we find the group from DICOM dictionary only it is DICOM standard group 
-        /*
-        if (pRecord._musGrp % 2 == 0)
+        
+        if (pRecord._musGrp != 0x0002 && pRecord._musGrp % 2 == 0)
         {
             pDictRecord = gpDicomDict.Find(pRecord._musGrp, pRecord._musEle);
         }
-        */
 
-        //if (pDictRecord)
-        /*
-        if (_marrpRecord != null)
+
+        if (pDictRecord)
+
+        //if (_marrpRecord != null)
         {
             // set record name and VR 
             pRecord._msName = pDictRecord._msName;
             pRecord._msVR = pDictRecord._msVR;
 
-        */
-            //if (pDictRecord._msVR == "SQ" || pDictRecord._msVR == "??" || pRecord._mulLen == 0)
-            if (pRecord._mulLen == 0)
+
+            if (pDictRecord._msVR == "SQ" || pDictRecord._msVR == "??" || pRecord._mulLen == 0)
+            //if (pRecord._mulLen == 0)
             {
                 pRecord._mpData = null;
                 return true;
             }
+        }
         
         
 

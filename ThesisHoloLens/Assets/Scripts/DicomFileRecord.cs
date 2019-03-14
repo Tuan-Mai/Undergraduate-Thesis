@@ -16,7 +16,7 @@ public class DicomFileRecord : MonoBehaviour
     public ushort _musEle = 0;
     public ulong _mulLen = 0;
     public string _msName;
-    public string _msVR = " ";
+    public string _msVR;
     public ushort _musTagLen = 0;
     public long _miFilePos = 0;
     public byte[] _mpData; // make sure this is a pointer or reference

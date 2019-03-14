@@ -2252,11 +2252,11 @@
 (4008,0210) Interpretation Type ID CS 1 RET 
 (4008,0212) Interpretation Status ID CS 1 RET 
 (4008,0300) Impressions ST 1 RET 
-(4008,4000) Results Comments ST 1 RET
-(7FE0,0010) Pixel Data OW or OB 1
-(FFFA,FFFA) Digital Signatures Sequence SQ 1
-(FFFC,FFFC) Data Set TRailing Padding OB 1
-(FFFE,E000) Item ?? 1
-(FFFE,E00D) Item Delimitation Item ?? 1
-(FFFE,E0DD) Sequence Delimitation Item ?? 1
+(4008,4000) Results Comments ST 1 RET 
+(7FE0,0010) Pixel Data OW or OB 1 
+(FFFA,FFFA) Digital Signatures Sequence SQ 1 
+(FFFC,FFFC) Data Set TRailing Padding OB 1 
+(FFFE,E000) Item ?? 1 
+(FFFE,E00D) Item Delimitation Item ?? 1 
+(FFFE,E0DD) Sequence Delimitation Item ?? 1 
  
