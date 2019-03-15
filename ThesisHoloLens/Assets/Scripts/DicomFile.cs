@@ -50,7 +50,7 @@ public class DicomFile : MonoBehaviour
     double _mdImgXPixelSpacing;
     double _mdImgYPixelSpacing;
     // add on oct 29 
-    double m_dZdistance;
+    double _mdZdistance;
     // Slice thickness tag (0x0018, 0x0050)  // unit mm
     double _mdSliceThicknessOriginal;
 
@@ -67,18 +67,18 @@ public class DicomFile : MonoBehaviour
 
 
     // CT Pixel Data length and pointer (7FE0,0010)
-    ulong m_ulPixelDataLen;
-    byte[] m_pPixelData;
-    double m_pEdgeDataSobel;
-    byte[] m_pEdgeData;
+    ulong _mulPixelDataLen;
+    byte[] _mpPixelData;
+    double _mpEdgeDataSobel;
+    byte[] _mpEdgeData;
 
     //CArray<DicomFileRecord*, DicomFileRecord*> _marrpRecord;
     List<DicomFileRecord> _marrpRecord = new List<DicomFileRecord>();
 
-    double _mulPixelDataLen;
+    //double _mulPixelDataLen;
     public string _msFileName;
 
-    bool _mbExplicitVR;
+    bool _mbExplicitVR; 
 
     string tempString = "";
 
@@ -118,7 +118,7 @@ public class DicomFile : MonoBehaviour
     public bool Load()
     {
         //_msFileName = sFileName;
-        _msFileName = "CT002000001.dcm";
+        _msFileName = "CT002000005.dcm";
 
         //TODO: set filename to the end of path 
         string path = "Assets/Datasets/CTDataset1/" + _msFileName;
@@ -553,34 +553,43 @@ public class DicomFile : MonoBehaviour
             _miImgRow = BitConverter.ToUInt16(pRecord._mpData, 0);
             */
 
-            // instance number (image number)
-            if (pRecord._musGrp == 0x0020 && pRecord._musEle == 0x0013)
+            // instance number (image number)   Y
+            if (pRecord._musGrp == Convert.ToUInt16("0x0020", 16) && pRecord._musEle == Convert.ToUInt16("0x0013", 16))
             {
-                _miInstanceNum = BitConverter.ToInt32(pRecord._mpData, 0);
+                string tempString = Encoding.UTF8.GetString(pRecord._mpData).TrimEnd('\0');
+
+                _miInstanceNum = Convert.ToInt16(tempString);
+
+                //_miInstanceNum = BitConverter.ToInt16(pRecord._mpData, 0);
             }
-            // (0008, 0016)	UI	SOP Class UID
-            else if (pRecord._musGrp == 0x0008 && pRecord._musEle == 0x0016)
+            // (0008, 0016)	UI	SOP Class UID   Y
+            else if (pRecord._musGrp == Convert.ToUInt16("0x0008", 16) && pRecord._musEle == Convert.ToUInt16("0x0016", 16))
             {
-                _msSOPClassUID = string.Format("{0}", pRecord._mpData);
+                _msSOPClassUID = Encoding.UTF8.GetString(pRecord._mpData).TrimEnd('\0');
+                //_msSOPClassUID = _msSOPClassUID.TrimEnd('\0');
+                //_msSOPClassUID = string.Format("{0}", pRecord._mpData);
             }
-            // (0008, 0018)	UI	SOP Instance UID
-            else if (pRecord._musGrp == 0x0008 && pRecord._musEle == 0x0018)
+            // (0008, 0018)	UI	SOP Instance UID    Y
+            else if (pRecord._musGrp == Convert.ToUInt16("0x0008", 16) && pRecord._musEle == Convert.ToUInt16("0x0018", 16))
             {
-                _msSOPInstanceUID = string.Format("{0}", pRecord._mpData);
+                _msSOPInstanceUID = Encoding.UTF8.GetString(pRecord._mpData).TrimEnd('\0');
+                //_msSOPInstanceUID = string.Format("{0}", pRecord._mpData);
             }
-            // (0010, 0010)	Patient Name
-            else if (pRecord._musGrp == 0x0010 && pRecord._musEle == 0x0010)
+            // (0010, 0010)	Patient Name    Y
+            else if (pRecord._musGrp == Convert.ToUInt16("0x0010", 16) && pRecord._musEle == Convert.ToUInt16("0x0010", 16))
             {
 
                 // the format of the patient name is last name + '^' + first name + '^'
                 string sPatientName;
-                sPatientName = string.Format("{0}", pRecord._mpData);
+
+                sPatientName = Encoding.UTF8.GetString(pRecord._mpData).TrimEnd('\0');
+                //sPatientName = string.Format("{0}", pRecord._mpData);
                 int iPos = sPatientName.IndexOf('^');
                 if (iPos != -1)
                 {
-                    _msPatientNameLast = sPatientName.Substring(0, iPos - 1);
+                    _msPatientNameLast = sPatientName.Substring(0, iPos);
                     _msPatientNameFirst = sPatientName.Substring(iPos + 1);
-                    _msPatientNameFirst.Remove('^');
+                 //   _msPatientNameFirst.Remove('^');
                 }
                 else
                 {
@@ -592,70 +601,99 @@ public class DicomFile : MonoBehaviour
                 _msPatientNameFirst.TrimEnd();
                 _msPatientNameLast.TrimEnd();
             }
-            // (0010, 0020)	Patient ID
-            else if (pRecord._musGrp == 0x0010 && pRecord._musEle == 0x0020)
+            // (0010, 0020)	Patient ID  Y
+            else if (pRecord._musGrp == Convert.ToUInt16("0x0010", 16) && pRecord._musEle == Convert.ToUInt16("0x0020", 16))
             {
-                _msPatientID = string.Format("{0}", pRecord._mpData);
+                _msPatientID = Encoding.UTF8.GetString(pRecord._mpData).TrimEnd('\0');
+                //_msPatientID = string.Format("{0}", pRecord._mpData);
             }
-            // (0010, 0040)	Patient Sex
-            else if (pRecord._musGrp == 0x0010 && pRecord._musEle == 0x0040)
+            // (0010, 0040)	Patient Sex Y
+            else if (pRecord._musGrp == Convert.ToUInt16("0x0010", 16) && pRecord._musEle == Convert.ToUInt16("0x0040", 16))
             {
-                _msPatientSex = string.Format("{0}", pRecord._mpData);
+                _msPatientSex = Encoding.UTF8.GetString(pRecord._mpData).TrimEnd('\0').TrimEnd();
+                //_msPatientSex = string.Format("{0}", pRecord._mpData);
             }
-            // (0028, 0010)	Image Rows (width)
-            else if (pRecord._musGrp == 0x0028 && pRecord._musEle == 0x0010)
+            // (0028, 0010)	Image Rows (width)  M
+            else if (pRecord._musGrp == Convert.ToUInt16("0x0028", 16) && pRecord._musEle == Convert.ToUInt16("0x0010", 16))
             {
-                _miImgRow = BitConverter.ToInt32(pRecord._mpData, 0);
+                //string tempString = Encoding.UTF8.GetString(pRecord._mpData).TrimEnd('\0');
+
+
+                _miImgRow = BitConverter.ToInt16(pRecord._mpData, 0);
             }
 
-            // Image Columns	(0028, 0011)
-            else if (pRecord._musGrp == 0x0028 && pRecord._musEle == 0x0011)
+            // Image Columns	(0028, 0011)    M
+            else if (pRecord._musGrp == Convert.ToUInt16("0x0028", 16) && pRecord._musEle == Convert.ToUInt16("0x0011", 16))
             {
-                _miImgCol = BitConverter.ToInt32(pRecord._mpData, 0);
+                //string tempString = Encoding.UTF8.GetString(pRecord._mpData).TrimEnd('\0');
+
+                _miImgCol = BitConverter.ToInt16(pRecord._mpData, 0);
             }
-            // image position
-            else if (pRecord._musGrp == 0x0020 && pRecord._musEle == 0x0032)
+            // image position   Y
+            else if (pRecord._musGrp == Convert.ToUInt16("0x0020", 16) && pRecord._musEle == Convert.ToUInt16("0x0032", 16))
             {
                 //reads double 
                 //k = sscanf(pRecord._mpData, "%lf\\%lf\\%lf", _mdImgPos, _mdImgPos + 1, _mdImgPos + 2);
                 //k = sscanf(pRecord._mpData, "%lf\\%lf\\%lf", _mdImgPos, _mdImgPos + 1, _mdImgPos + 2);
+                string tempString = Encoding.UTF8.GetString(pRecord._mpData).TrimEnd('\0');
 
-                _mdImgPos[0] = BitConverter.ToDouble(pRecord._mpData, 0);
-                _mdImgPos[1] = BitConverter.ToDouble(pRecord._mpData, 8);
-                _mdImgPos[2] = BitConverter.ToDouble(pRecord._mpData, 16);
+                var positions = tempString.Split('\\');
+
+                _mdImgPos[0] = Convert.ToDouble(positions[0]);
+                _mdImgPos[1] = Convert.ToDouble(positions[1]);
+                _mdImgPos[2] = Convert.ToDouble(positions[2]);
+
+                //_mdImgPos[0] = BitConverter.ToSingle(pRecord._mpData, 0);
+                //_mdImgPos[1] = BitConverter.ToSingle(pRecord._mpData, 5);
+                //_mdImgPos[2] = BitConverter.ToSingle(pRecord._mpData, 10);
                 k = 3;
 
                 Debug.Assert(k == 3);
             }
-            // slice location
-            else if (pRecord._musGrp == 0x0020 && pRecord._musEle == 0x1041)
+            // slice location   Y
+            else if (pRecord._musGrp == Convert.ToUInt16("0x0020", 16) && pRecord._musEle == Convert.ToUInt16("0x1041", 16))
             {
+                string tempString = Encoding.UTF8.GetString(pRecord._mpData).TrimEnd('\0');
+
+                _mdSliceLocation = Convert.ToDouble(tempString);
 
                 //k = sscanf(pRecord._mpData, "%lf", &_mdSliceLocation);
                 //k = sscanf(pRecord._mpData, "%lf", &_mdSliceLocation);
                 //_mdSliceLocation = Int32.Parse(pRecord._mpData[0]);
-                _mdSliceLocation = BitConverter.ToDouble(pRecord._mpData, 0);
+                //_mdSliceLocation = BitConverter.ToDouble(pRecord._mpData, 0);
                 k = 1;
 
                 Debug.Assert(k == 1);
             }
-            // slice thinkness
-            else if (pRecord._musGrp == 0x0018 && pRecord._musEle == 0x0050)
+            // slice thinkness  Y
+            else if (pRecord._musGrp == Convert.ToUInt16("0x0018", 16) && pRecord._musEle == Convert.ToUInt16("0x0050", 16))
             {
                 //k = sscanf(pRecord._mpData, "%lf", &_mdSliceThickness);
-                _mdSliceThickness = BitConverter.ToDouble(pRecord._mpData, 0);
+
+                string tempString = Encoding.UTF8.GetString(pRecord._mpData).TrimEnd('\0');
+
+                _mdSliceThickness = Convert.ToDouble(tempString);
+
+                //_mdSliceThickness = BitConverter.ToSingle(pRecord._mpData, 0);
                 _mdSliceThicknessOriginal = _mdSliceThickness;
-                m_dZdistance = _mdSliceThickness;  //add on oct 29,2007
+                _mdZdistance = _mdSliceThickness;  //add on oct 29,2007
                 k = 1;
 
                 Debug.Assert(k == 1);
             }
-            // image XY pixel spacing
-            else if (pRecord._musGrp == 0x0028 && pRecord._musEle == 0x0030)
+            // image XY pixel spacing   Y
+            else if (pRecord._musGrp == Convert.ToUInt16("0x0028", 16) && pRecord._musEle == Convert.ToUInt16("0x0030", 16))
             {
                 //k = sscanf(pRecord._mpData, "%lf\\%lf", &_mdImgXPixelSpacing, &_mdImgYPixelSpacing);
-                _mdImgXPixelSpacing = BitConverter.ToDouble(pRecord._mpData, 0);
-                _mdImgYPixelSpacing = BitConverter.ToDouble(pRecord._mpData, 8);
+                string tempString = Encoding.UTF8.GetString(pRecord._mpData).TrimEnd('\0');
+
+                var positions = tempString.Split('\\');
+
+                _mdImgXPixelSpacing = Convert.ToDouble(positions[0]);
+                _mdImgYPixelSpacing = Convert.ToDouble(positions[1]);
+
+                //_mdImgXPixelSpacing = BitConverter.ToDouble(pRecord._mpData, 0);
+                //_mdImgYPixelSpacing = BitConverter.ToDouble(pRecord._mpData, 8);
 
                 k = 2;
 
@@ -679,11 +717,11 @@ public class DicomFile : MonoBehaviour
 
 
             // Pixel data (7FE0,0010)
-            else if (pRecord._musGrp == 0x7FE0 && pRecord._musEle == 0x0010)
+            else if (pRecord._musGrp == Convert.ToUInt16("0x7FE0", 16) && pRecord._musEle == Convert.ToUInt16("0x0010", 16))
             {
                 // set the pixel data length and pointer for reference convience
-                m_ulPixelDataLen = pRecord._mulLen;
-                m_pPixelData = pRecord._mpData;
+                _mulPixelDataLen = pRecord._mulLen;
+                _mpPixelData = pRecord._mpData;
             }
 
             /*
