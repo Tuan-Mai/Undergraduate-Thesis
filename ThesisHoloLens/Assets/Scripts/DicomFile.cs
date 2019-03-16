@@ -75,12 +75,37 @@ public class DicomFile : MonoBehaviour
     //CArray<DicomFileRecord*, DicomFileRecord*> _marrpRecord;
     List<DicomFileRecord> _marrpRecord = new List<DicomFileRecord>();
 
+    List<DicomFileData> _dicomFileDataList = new List<DicomFileData>();
+
     //double _mulPixelDataLen;
     public string _msFileName;
 
     bool _mbExplicitVR; 
 
     string tempString = "";
+
+    string[] _dicomFileNameList;
+
+    
+
+    public struct DicomFileData
+    {
+        public string _dataFileName;
+        public List<DicomFileRecord> _dataRecord;
+    }
+
+    // Start is called before the first frame update
+    public void Start()
+    {
+        Init();
+        //Load();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
 
     void Init()
     {
@@ -110,15 +135,49 @@ public class DicomFile : MonoBehaviour
 
         _msFileName = null;//Empty();
 
+
+        // Load all Dicom Tags into a List to reference later
         gpDicomDict.Load("DICOM_Dictionary.txt");
+
+        // Get all the Filenames 
+        GetDicomFileNames();
+
+        // Load each Dicom File (which will read the information)
+        // foreach filename in filenamelist 
+        foreach (string sFileName in _dicomFileNameList)
+        {
+            DicomFileData dicomFileData = new DicomFileData();
+            
+            Load(sFileName);
+
+            dicomFileData._dataFileName = sFileName;
+            dicomFileData._dataRecord = _marrpRecord;
+
+            _dicomFileDataList.Add(dicomFileData);
+        }
+
     }
 
 
-    //public bool Load(string sFileName)
-    public bool Load()
+    public void GetDicomFileNames()
     {
-        //_msFileName = sFileName;
-        _msFileName = "CT002000005.dcm";
+        // Get all the CTxxx.dcm filenames and save them in a string array
+        
+        // We will only be getting CT scans that are .dcm in our case
+        _dicomFileNameList = Directory.GetFiles("Assets/Datasets/CTDataset1/", "CT*.dcm");
+        
+        for (int i = 0; i < _dicomFileNameList.Length; i++)
+        {
+            int j = _dicomFileNameList[i].LastIndexOf('/');
+            _dicomFileNameList[i] = _dicomFileNameList[i].Substring(j + 1);
+        }
+    }
+
+    //public bool Load(string sFileName)
+    public bool Load(string sFileName)
+    {
+        _msFileName = sFileName;
+        //_msFileName = "CT002000005.dcm";
 
         //TODO: set filename to the end of path 
         string path = "Assets/Datasets/CTDataset1/" + _msFileName;
@@ -509,23 +568,6 @@ public class DicomFile : MonoBehaviour
         return true;
     }
 
-    public DicomFileRecord FindRecord(ushort usGrp, ushort usEle)
-    {
-        DicomFileRecord pRecord;
-        int i;
-        for (i = 0; i < _marrpRecord.Count; i++)
-        {
-            pRecord = _marrpRecord[i];
-            if (pRecord._musGrp == usGrp && pRecord._musEle == usEle)
-            {
-                return pRecord;
-            }
-        }
-        return null;
-    }
-
-
-
     public void GetDicomFileCTInfo()
     {
 
@@ -539,19 +581,6 @@ public class DicomFile : MonoBehaviour
         {
             pRecord = _marrpRecord[i];
 
-            /*
-            _mdImgPos[0] = BitConverter.ToDouble(pRecord._mpData, 0);
-            _mdImgPos[1] = BitConverter.ToDouble(pRecord._mpData, 8);
-            _mdImgPos[2] = BitConverter.ToDouble(pRecord._mpData, 16);
-
-            double tmp;
-            tmp = BitConverter.ToDouble(pRecord._mpData, 0);
-
-            uint intTmp;
-            intTmp = BitConverter.ToUInt32(pRecord._mpData, 0);
-
-            _miImgRow = BitConverter.ToUInt16(pRecord._mpData, 0);
-            */
 
             // instance number (image number)   Y
             if (pRecord._musGrp == Convert.ToUInt16("0x0020", 16) && pRecord._musEle == Convert.ToUInt16("0x0013", 16))
@@ -737,22 +766,5 @@ public class DicomFile : MonoBehaviour
 
 
     //DicomFile() { }
-
-
-
-
-
-    // Start is called before the first frame update
-    public void Start()
-    {
-        Init();
-        Load();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 
 }
