@@ -68,7 +68,8 @@ public class DicomFile : MonoBehaviour
 
     // CT Pixel Data length and pointer (7FE0,0010)
     ulong _mulPixelDataLen;
-    byte[] _mpPixelData;
+    public byte[] _mpPixelData;
+
     double _mpEdgeDataSobel;
     byte[] _mpEdgeData;
 
@@ -142,8 +143,12 @@ public class DicomFile : MonoBehaviour
         // Get all the Filenames 
         GetDicomFileNames();
 
+        Load();
+
         // Load each Dicom File (which will read the information)
         // foreach filename in filenamelist 
+
+        /*
         foreach (string sFileName in _dicomFileNameList)
         {
             DicomFileData dicomFileData = new DicomFileData();
@@ -155,6 +160,7 @@ public class DicomFile : MonoBehaviour
 
             _dicomFileDataList.Add(dicomFileData);
         }
+        */
 
     }
 
@@ -174,13 +180,13 @@ public class DicomFile : MonoBehaviour
     }
 
     //public bool Load(string sFileName)
-    public bool Load(string sFileName)
+    public bool Load()
     {
-        _msFileName = sFileName;
-        //_msFileName = "CT002000005.dcm";
+        //_msFileName = sFileName;
+        _msFileName = "CT002002025.dcm";
 
         //TODO: set filename to the end of path 
-        string path = "Assets/Datasets/CTDataset1/" + _msFileName;
+        string path = "Assets/Datasets/CTDataset2/" + _msFileName;
 
 
         if (!File.Exists(path))
@@ -748,6 +754,8 @@ public class DicomFile : MonoBehaviour
             // Pixel data (7FE0,0010)
             else if (pRecord._musGrp == Convert.ToUInt16("0x7FE0", 16) && pRecord._musEle == Convert.ToUInt16("0x0010", 16))
             {
+                string tempString = Encoding.UTF8.GetString(pRecord._mpData).TrimEnd('\0');
+
                 // set the pixel data length and pointer for reference convience
                 _mulPixelDataLen = pRecord._mulLen;
                 _mpPixelData = pRecord._mpData;
