@@ -10,7 +10,8 @@ public class DicomFile : MonoBehaviour
 {
 
     // Feb 17, 2019
-    DicomDict gpDicomDict = new DicomDict();
+    //DicomDict _gpDicomDict = new DicomDict();
+    DicomDict _gpDicomDict;
 
     bool _mbInterpolationFileFlag;
     // POI/ROI/RTPLAN/CT
@@ -21,7 +22,7 @@ public class DicomFile : MonoBehaviour
     // for POI:    set it to BBT_INSTANCE_NUM_POI
     // for ROI:    set it to BBT_INSTANCE_NUM_ROI
     // for RTPLAN: set it to BBT_INSTANCE_NUM_RTPLAN
-    int _miInstanceNum;     // instance number
+    public int _miInstanceNum;     // instance number
 
     // (0008, 0016)	UI	SOP Class UID
     // (0008, 0018)	UI	SOP Instance UID
@@ -74,9 +75,9 @@ public class DicomFile : MonoBehaviour
     byte[] _mpEdgeData;
 
     //CArray<DicomFileRecord*, DicomFileRecord*> _marrpRecord;
-    List<DicomFileRecord> _marrpRecord = new List<DicomFileRecord>();
+    public List<DicomFileRecord> _marrpRecord = new List<DicomFileRecord>();
 
-    List<DicomFileData> _dicomFileDataList = new List<DicomFileData>();
+    
 
     //double _mulPixelDataLen;
     public string _msFileName;
@@ -85,20 +86,18 @@ public class DicomFile : MonoBehaviour
 
     string tempString = "";
 
-    string[] _dicomFileNameList;
+
 
     
 
-    public struct DicomFileData
-    {
-        public string _dataFileName;
-        public List<DicomFileRecord> _dataRecord;
-    }
+
 
     // Start is called before the first frame update
     public void Start()
     {
-        Init();
+        
+
+        //Init();
         //Load();
     }
 
@@ -108,8 +107,10 @@ public class DicomFile : MonoBehaviour
 
     }
 
-    void Init()
+    public void Init(DicomDict gpDicomDict)
     {
+        _gpDicomDict = gpDicomDict;
+
         _miDicomFileType = 0;
         _miInstanceNum = 0;
 
@@ -138,12 +139,10 @@ public class DicomFile : MonoBehaviour
 
 
         // Load all Dicom Tags into a List to reference later
-        gpDicomDict.Load("DICOM_Dictionary.txt");
+        //_gpDicomDict.Load("DICOM_Dictionary.txt");
 
-        // Get all the Filenames 
-        GetDicomFileNames();
 
-        Load();
+        //Load();
 
         // Load each Dicom File (which will read the information)
         // foreach filename in filenamelist 
@@ -165,25 +164,12 @@ public class DicomFile : MonoBehaviour
     }
 
 
-    public void GetDicomFileNames()
-    {
-        // Get all the CTxxx.dcm filenames and save them in a string array
-        
-        // We will only be getting CT scans that are .dcm in our case
-        _dicomFileNameList = Directory.GetFiles("Assets/Datasets/CTDataset1/", "CT*.dcm");
-        
-        for (int i = 0; i < _dicomFileNameList.Length; i++)
-        {
-            int j = _dicomFileNameList[i].LastIndexOf('/');
-            _dicomFileNameList[i] = _dicomFileNameList[i].Substring(j + 1);
-        }
-    }
-
     //public bool Load(string sFileName)
-    public bool Load()
+    public bool Load(string sFileName)
     {
-        //_msFileName = sFileName;
-        _msFileName = "CT002002025.dcm";
+        _msFileName = sFileName;
+        //_msFileName = "CT002000025.dcm";
+        //_msFileName = "CT002002002.dcm";
 
         //TODO: set filename to the end of path 
         string path = "Assets/Datasets/CTDataset2/" + _msFileName;
@@ -194,7 +180,7 @@ public class DicomFile : MonoBehaviour
             return false;
         }
 
-        //gpDicomDict.Load(_msFileName);
+        //_gpDicomDict.Load(_msFileName);
 
         
         using (BinaryReader fs = new BinaryReader(File.Open(path, FileMode.Open, FileAccess.Read)))
@@ -425,7 +411,7 @@ public class DicomFile : MonoBehaviour
         
         if (pRecord._musGrp % 2 == 0)
         {
-            pDictRecord = gpDicomDict.Find(pRecord._musGrp, pRecord._musEle);
+            pDictRecord = _gpDicomDict.Find(pRecord._musGrp, pRecord._musEle);
         }
 
 
