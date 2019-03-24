@@ -104,9 +104,11 @@ public class DisplayCTImage : MonoBehaviour {
 
         iNum = 0;
 
+        /*
         while (iNum <= _dicomFileNameList.Length + 1)
         {
-            string tempString = _dicomFileNameList[iNum];
+            //string tempString = _dicomFileNameList[iNum];
+            string tempString = "CT002002002.dcm";
 
             _dicomFile.Load(tempString);
 
@@ -121,8 +123,22 @@ public class DisplayCTImage : MonoBehaviour {
             rawImage.GetComponent<RawImage>().material.mainTexture = texture;
 
         }
+        */
 
-        
+        string tempString = "CT002002002.dcm";
+
+        _dicomFile.Load(tempString);
+
+        _pixelData = _dicomFile._mpPixelData;
+
+        Texture2D texture = new Texture2D(512, 512, TextureFormat.RG16, false, true);
+
+        texture.LoadRawTextureData(_pixelData);
+
+        texture.Apply();
+
+        rawImage.GetComponent<RawImage>().material.mainTexture = texture;
+
 
         //int conversion = (_dicomFile._mpPixelData.Length - 1 / 65535) * 255;
         //_pixelData = _dicomFile._mpPixelData;
