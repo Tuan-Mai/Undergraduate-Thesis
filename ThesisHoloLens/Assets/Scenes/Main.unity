@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.574817, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -240,7 +240,7 @@ RectTransform:
   m_GameObject: {fileID: 35430584}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: -1, z: 1}
   m_Children: []
   m_Father: {fileID: 1902640669}
   m_RootOrder: 4
@@ -1843,7 +1843,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd037b41a7e11b947afe1dd97e8de585, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _miInstanceNum: 0
   _mpPixelData: 
+  _marrpRecord: []
   _msFileName: 
 --- !u!1 &1809477090
 GameObject:
@@ -2446,6 +2448,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f90af85968eac1418ce7e4a86dc9008, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  iNum: 0
+  _pixelData: 
 --- !u!4 &2128064829
 Transform:
   m_ObjectHideFlags: 0

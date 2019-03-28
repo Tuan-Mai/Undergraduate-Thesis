@@ -140,23 +140,34 @@ public class DisplayCTImage : MonoBehaviour {
 
         _pixelData = new byte[20 * 512 * 512 + 1];
 
-        
+
         byte[] temp = new byte[8 * 512 * 512];
 
         int j = 0;
-        for (int i = 0; i < _dicomFile._mpPixelData.Length; i+=2)
+        for (int i = 0; i < _dicomFile._mpPixelData.Length; i += 2)
         {
             temp[i] = 0;
-            temp[i+1] = _dicomFile._mpPixelData[i];
+            temp[i + 1] = _dicomFile._mpPixelData[i];
             //temp[i+2] = _dicomFile._mpPixelData[i];
             //temp[i+3] = _dicomFile._mpPixelData[i];
             //j++;
         }
 
+        Buffer.BlockCopy(temp, 0, _pixelData, 0, temp.Length - 50000);
+
+
+        var colorArray = new Color32[512 * 512];
+
+        for (var i = 0; i < _dicomFile._mpPixelData.Length - 1; i += 4)
+        {
+            var color = new Color32(_dicomFile._mpPixelData[i + 0], _dicomFile._mpPixelData[i + 1], _dicomFile._mpPixelData[i + 2], _dicomFile._mpPixelData[i + 3]);
+
+            colorArray[i / 4] = color; 
+        }
 
 
         //int j = 0; 
-
+        /*
         byte[] _newPixelData = new byte[20 * 512 * 512];
 
         for (int i = 0; i < temp.Length; i+=4)
@@ -171,7 +182,7 @@ public class DisplayCTImage : MonoBehaviour {
         {
             _newPixelData[i] = (byte)((_pixelData[i] + _pixelData[i + 1] + _pixelData[i + 2])/3); 
         }
-
+        */
 
 
         /*
@@ -210,10 +221,10 @@ public class DisplayCTImage : MonoBehaviour {
         }
 
 
-        
         //_pixelData = _dicomFile._mpPixelData;
 
         Texture2D texture = new Texture2D(512, 512, TextureFormat.R16, false, true);
+
 
         /*
         var colors = new Color32[_dicomFile._mpPixelData.Length/2];
@@ -234,25 +245,26 @@ public class DisplayCTImage : MonoBehaviour {
             (byte)1);
     }
     */
-    
 
-        //texture.LoadRawTextureData(_pixelData);
-        texture.LoadRawTextureData(temp);
+        //texture.SetPixels32(colorArray);
+        texture.LoadRawTextureData(_pixelData);
+        //texture.LoadRawTextureData(temp);
         //texture.LoadRawTextureData(alphaByte);
         //texture.LoadRawTextureData(_newPixelData);
         //texture.LoadRawTextureData(_dicomFile._mpPixelData);
 
         texture.Apply();
-
+        rawImage.GetComponent<RawImage>().material.mainTexture = texture;
         //var pixelColor = texture.GetPixels32();
 
-        /*
-        Color32[] pixels = texture.GetPixels32();
-        for (int x = 0; x < texture.width; x++)
+        Texture2D nTex = new Texture2D(512, 512, TextureFormat.RGBA32, false, true); ;
+
+        Color32[] pixels = nTex.GetPixels32();
+        for (int x = 0; x < nTex.width; x++)
         {
-            for (int y = 0; y < texture.height; y++)
+            for (int y = 0; y < nTex.height; y++)
             {
-                Color32 pixel = pixels[x + y * texture.width];
+                Color32 pixel = pixels[x + y * nTex.width];
                 int p = ((256 * 256 + pixel.r) * 256 + pixel.b) * 256 + pixel.g;
                 int b = p % 256;
                 p = Mathf.FloorToInt(p / 256);
@@ -261,19 +273,20 @@ public class DisplayCTImage : MonoBehaviour {
                 int r = p % 256;
                 float l = (0.2126f * r / 255f) + 0.7152f * (g / 255f) + 0.0722f * (b / 255f);
                 Color c = new Color(l, l, l, 1);
-                texture.SetPixel(x, y, c);
+                nTex.SetPixel(x, y, c);
                 
             }
         }
-        texture.Apply();
-        */
+        nTex.Apply();
+        
 
 
         //RenderTexture rTex = null;
 
         //Graphics.Blit(texture, rTex);
 
-        rawImage.GetComponent<RawImage>().material.mainTexture = texture;
+        //rawImage.GetComponent<RawImage>().material.mainTexture = texture;
+        rawImage.GetComponent<RawImage>().material.mainTexture = nTex;
         
 
         //int conversion = (_dicomFile._mpPixelData.Length - 1 / 65535) * 255;
