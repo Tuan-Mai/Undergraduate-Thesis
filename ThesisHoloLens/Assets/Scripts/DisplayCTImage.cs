@@ -39,20 +39,17 @@ public class DisplayCTImage : MonoBehaviour {
     // Use this for initialization
     void Start () {
 
-        _dicomFile = new DicomFile();
-        
+        iNum = 1; 
 
         // Load all Dicom Tags into a List to reference later
         gpDicomDict.Load("DICOM_Dictionary.txt");
-
-        _dicomFile.Init(gpDicomDict);
 
         // Get file name of all Dicom Files from folder
         GetDicomFileNames();
 
 
         // Load all Dicom Files
-        //LoadEveryDicomFile();
+        LoadEveryDicomFile();
 
 
         // Display the CT image
@@ -61,15 +58,26 @@ public class DisplayCTImage : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            iNum++;
+            DisplayCT();
+        }
 		
-	}
+        else if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            iNum--;
+            DisplayCT();
+        }
+    }
 
     public void GetDicomFileNames()
     {
         // Get all the CTxxx.dcm filenames and save them in a string array
 
         // We will only be getting CT scans that are .dcm in our case
-        _dicomFileNameList = Directory.GetFiles("Assets/Datasets/CTDataset2/", "CT*.dcm");
+        _dicomFileNameList = Directory.GetFiles("Assets/Datasets/CTDatasetTest/", "CT*.dcm");
 
         for (int i = 0; i < _dicomFileNameList.Length; i++)
         {
@@ -89,6 +97,10 @@ public class DisplayCTImage : MonoBehaviour {
         {
             dicomFileData = new DicomFileData();
 
+            _dicomFile = new DicomFile();
+
+            _dicomFile.Init(gpDicomDict);
+
             _dicomFile.Load(sFileName);
 
             dicomFileData._instanceNum = _dicomFile._miInstanceNum;
@@ -103,41 +115,106 @@ public class DisplayCTImage : MonoBehaviour {
     {
         rawImage = GameObject.Find("CTSlice");
 
+        
+        Renderer renderer = GetComponent<Renderer>();
+
         //_dicomFile = new DicomFile();
 
         //_dicomFile.Init(gpDicomDict);
 
-        iNum = 0;
+        //iNum = 1;
 
         /*
-        while (iNum <= _dicomFileNameList.Length + 1)
+        if (iNum == _dicomFileDataList[iNum]._instanceNum)
         {
-            string tempString = _dicomFileNameList[iNum];
+            _pixelData = new byte[6 * 512 * 512];
 
-            _dicomFile.Load(tempString);
+            for (int i = 0; i < _dicomFileDataList[iNum]._pData.Length - 1; i += 2)
+            {
+                _pixelData[i] = 0;
+                _pixelData[i + 1] = _dicomFileDataList[iNum]._pData[i];
+            }
 
-            _pixelData = _dicomFile._mpPixelData;
-
-            Texture2D texture = new Texture2D(512, 512, TextureFormat.Alpha8, false, true);
+            Texture2D texture = new Texture2D(512, 512, TextureFormat.R16, false, true);
 
             texture.LoadRawTextureData(_pixelData);
 
             texture.Apply();
 
             rawImage.GetComponent<RawImage>().material.mainTexture = texture;
+        }
 
+        else */if (iNum == _dicomFileDataList[iNum - 1]._instanceNum)
+        {
+            _pixelData = new byte[6 * 512 * 512];
+
+            for (int i = 0; i < _dicomFileDataList[iNum - 1]._pData.Length - 1; i += 2)
+            {
+                _pixelData[i] = 0;
+                _pixelData[i + 1] = _dicomFileDataList[iNum - 1]._pData[i];
+            }
+
+            Texture2D texture = new Texture2D(512, 512, TextureFormat.R16, false, true);
+
+            texture.LoadRawTextureData(_pixelData);
+
+            texture.Apply();
+
+            //rawImage.GetComponent<RawImage>().material.mainTexture = texture;
+            //renderer.material.SetTexture("_MainTex", texture);
+            //rawImage.GetComponent<Renderer>().material.SetTexture("_MainTex", texture);
+            //rawImage.GetComponent<RawImage>().material.SetTexture("_MainTex", texture);
+            rawImage.GetComponent<RawImage>().texture = texture; 
+        }
+        /*
+        else if (iNum == _dicomFileDataList[iNum + 1]._instanceNum)
+        {
+            _pixelData = new byte[6 * 512 * 512];
+
+            for (int i = 0; i < _dicomFileDataList[iNum + 1]._pData.Length - 1; i += 2)
+            {
+                _pixelData[i] = 0;
+                _pixelData[i + 1] = _dicomFileDataList[iNum + 1]._pData[i];
+            }
+
+            Texture2D texture = new Texture2D(512, 512, TextureFormat.R16, false, true);
+
+            texture.LoadRawTextureData(_pixelData);
+
+            texture.Apply();
+
+            rawImage.GetComponent<RawImage>().material.mainTexture = texture;
         }
         */
 
 
+
+
+
+
+
+
+
+
+
+        /*
+        switch (iNum)
+        {
+            case iNum:
+                break;
+        }
+        */
+
+        /*
         // TEST: Single CT image
         string tempString = "CT002002002.dcm";
 
         _dicomFile.Load(tempString);
-
+        */
         //int j = 0;
 
 
+        /*
         _pixelData = new byte[20 * 512 * 512 + 1];
 
 
@@ -148,11 +225,10 @@ public class DisplayCTImage : MonoBehaviour {
         {
             temp[i] = 0;
             temp[i + 1] = _dicomFile._mpPixelData[i];
-            //temp[i+2] = _dicomFile._mpPixelData[i];
-            //temp[i+3] = _dicomFile._mpPixelData[i];
-            //j++;
         }
+        */
 
+        /* 
         Buffer.BlockCopy(temp, 0, _pixelData, 0, temp.Length - 50000);
 
 
@@ -164,7 +240,7 @@ public class DisplayCTImage : MonoBehaviour {
 
             colorArray[i / 4] = color; 
         }
-
+        */
 
         //int j = 0; 
         /*
@@ -210,6 +286,7 @@ public class DisplayCTImage : MonoBehaviour {
         }
         */
 
+        /*
         byte[] alphaByte = new byte[8 * 512 * 512];
        
         for (int i = 0; i < _dicomFile._mpPixelData.Length; i+=2)
@@ -219,11 +296,11 @@ public class DisplayCTImage : MonoBehaviour {
             alphaByte[i+1] = _dicomFile._mpPixelData[i];
 
         }
-
+        */
 
         //_pixelData = _dicomFile._mpPixelData;
 
-        Texture2D texture = new Texture2D(512, 512, TextureFormat.R16, false, true);
+        //Texture2D texture = new Texture2D(512, 512, TextureFormat.R16, false, true);
 
 
         /*
@@ -247,16 +324,18 @@ public class DisplayCTImage : MonoBehaviour {
     */
 
         //texture.SetPixels32(colorArray);
-        texture.LoadRawTextureData(_pixelData);
+        //texture.LoadRawTextureData(_pixelData);
         //texture.LoadRawTextureData(temp);
         //texture.LoadRawTextureData(alphaByte);
         //texture.LoadRawTextureData(_newPixelData);
         //texture.LoadRawTextureData(_dicomFile._mpPixelData);
 
-        texture.Apply();
-        rawImage.GetComponent<RawImage>().material.mainTexture = texture;
+        //texture.Apply();
+        //rawImage.GetComponent<RawImage>().material.mainTexture = texture;
         //var pixelColor = texture.GetPixels32();
 
+
+        /*
         Texture2D nTex = new Texture2D(512, 512, TextureFormat.RGBA32, false, true); ;
 
         Color32[] pixels = nTex.GetPixels32();
@@ -287,7 +366,7 @@ public class DisplayCTImage : MonoBehaviour {
 
         //rawImage.GetComponent<RawImage>().material.mainTexture = texture;
         rawImage.GetComponent<RawImage>().material.mainTexture = nTex;
-        
+        */
 
         //int conversion = (_dicomFile._mpPixelData.Length - 1 / 65535) * 255;
         //_pixelData = _dicomFile._mpPixelData;

@@ -13,9 +13,9 @@ public class DicomFile : MonoBehaviour
     //DicomDict _gpDicomDict = new DicomDict();
     DicomDict _gpDicomDict;
 
-    bool _mbInterpolationFileFlag;
+    //private bool _mbInterpolationFileFlag;
     // POI/ROI/RTPLAN/CT
-    int _miDicomFileType;
+    private int _miDicomFileType;
 
     // Instance number for Dicom file
     // for CT:     set it to the value of tag (0x0020,0x0013)
@@ -26,65 +26,65 @@ public class DicomFile : MonoBehaviour
 
     // (0008, 0016)	UI	SOP Class UID
     // (0008, 0018)	UI	SOP Instance UID
-    string _msSOPClassUID;
-    string _msSOPInstanceUID;
+    private string _msSOPClassUID;
+    private string _msSOPInstanceUID;
 
     // Image Rows		(0028, 0010)
     // Image Columns	(0028, 0011)
-    int _miImgRow;
-    int _miImgCol;
+    private int _miImgRow;
+    private int _miImgCol;
 
     // Patient ID (0010, 0020)
-    string _msPatientID;
+    private string _msPatientID;
 
     // Patient Name (0010,0010)
-    string _msPatientNameFirst;
-    string _msPatientNameLast;
+    private string _msPatientNameFirst;
+    private string _msPatientNameLast;
 
     // Patient Sex (0010, 0040)
-    string _msPatientSex;
+    private string _msPatientSex;
 
     // image position (patient) tag (0x0020, 0x0032)
-    double[] _mdImgPos = new double[3];  // 0:X  1:Y  2:Z
+    private double[] _mdImgPos = new double[3];  // 0:X  1:Y  2:Z
 
     // image XY pixel spacing tag (0x0028, 0x0030)  // unit mm
-    double _mdImgXPixelSpacing;
-    double _mdImgYPixelSpacing;
+    private double _mdImgXPixelSpacing;
+    private double _mdImgYPixelSpacing;
     // add on oct 29 
-    double _mdZdistance;
+    private double _mdZdistance;
     // Slice thickness tag (0x0018, 0x0050)  // unit mm
-    double _mdSliceThicknessOriginal;
+    private double _mdSliceThicknessOriginal;
 
     // Slice thickness calculated by image z Position
-    double _mdSliceThickness;
+    private double _mdSliceThickness;
 
     // Slice Location tag (0x0020, 0x1041)
-    double _mdSliceLocation;
+    private double _mdSliceLocation;
 
     // window width and window center 
-    double _mdWinCenter;    // (0x0028, 0x1050)
-    double _mdWinWidth;     // (0x0028, 0x1051)
+    private double _mdWinCenter;    // (0x0028, 0x1050)
+    private double _mdWinWidth;     // (0x0028, 0x1051)
 
 
 
     // CT Pixel Data length and pointer (7FE0,0010)
-    ulong _mulPixelDataLen;
+    private ulong _mulPixelDataLen;
     public byte[] _mpPixelData;
 
-    double _mpEdgeDataSobel;
-    byte[] _mpEdgeData;
+    //private double _mpEdgeDataSobel;
+    //private byte[] _mpEdgeData;
 
     //CArray<DicomFileRecord*, DicomFileRecord*> _marrpRecord;
-    public List<DicomFileRecord> _marrpRecord = new List<DicomFileRecord>();
+    private List<DicomFileRecord> _marrpRecord = new List<DicomFileRecord>();
 
     
 
     //double _mulPixelDataLen;
     public string _msFileName;
 
-    bool _mbExplicitVR; 
+    private bool _mbExplicitVR;
 
-    string tempString = "";
+    private string tempString = "";
 
 
 
@@ -172,7 +172,7 @@ public class DicomFile : MonoBehaviour
         //_msFileName = "CT002002002.dcm";
 
         //TODO: set filename to the end of path 
-        string path = "Assets/Datasets/CTDataset2/" + _msFileName;
+        string path = "Assets/Datasets/CTDatasetTest/" + _msFileName;
 
 
         if (!File.Exists(path))
