@@ -26,7 +26,7 @@ public class DisplayCTImage : MonoBehaviour {
 
     List<DicomFileData> _dicomFileDataList = new List<DicomFileData>();
 
-
+    public RawImage _rImg;
 
     public struct DicomFileData
     {
@@ -113,6 +113,7 @@ public class DisplayCTImage : MonoBehaviour {
 
     public void DisplayCT()
     {
+
         rawImage = GameObject.Find("CTSlice");
 
         
@@ -122,7 +123,6 @@ public class DisplayCTImage : MonoBehaviour {
 
         //_dicomFile.Init(gpDicomDict);
 
-        //iNum = 1;
 
         /*
         if (iNum == _dicomFileDataList[iNum]._instanceNum)
@@ -144,7 +144,10 @@ public class DisplayCTImage : MonoBehaviour {
             rawImage.GetComponent<RawImage>().material.mainTexture = texture;
         }
 
-        else */if (iNum == _dicomFileDataList[iNum - 1]._instanceNum)
+        else */
+
+        /*
+        if (iNum == _dicomFileDataList[iNum - 1]._instanceNum)
         {
             _pixelData = new byte[6 * 512 * 512];
 
@@ -166,6 +169,10 @@ public class DisplayCTImage : MonoBehaviour {
             //rawImage.GetComponent<RawImage>().material.SetTexture("_MainTex", texture);
             rawImage.GetComponent<RawImage>().texture = texture; 
         }
+        */
+
+
+
         /*
         else if (iNum == _dicomFileDataList[iNum + 1]._instanceNum)
         {
@@ -187,247 +194,41 @@ public class DisplayCTImage : MonoBehaviour {
         }
         */
 
+        //byte[] bytes;
 
-
-
-
-
-
-
-
-
-
-        /*
-        switch (iNum)
+        for (int idx = 0; idx < _dicomFileDataList.Count; idx++)
         {
-            case iNum:
-                break;
-        }
-        */
+            _pixelData = new byte[6 * 512 * 512];
 
-        /*
-        // TEST: Single CT image
-        string tempString = "CT002002002.dcm";
-
-        _dicomFile.Load(tempString);
-        */
-        //int j = 0;
-
-
-        /*
-        _pixelData = new byte[20 * 512 * 512 + 1];
-
-
-        byte[] temp = new byte[8 * 512 * 512];
-
-        int j = 0;
-        for (int i = 0; i < _dicomFile._mpPixelData.Length; i += 2)
-        {
-            temp[i] = 0;
-            temp[i + 1] = _dicomFile._mpPixelData[i];
-        }
-        */
-
-        /* 
-        Buffer.BlockCopy(temp, 0, _pixelData, 0, temp.Length - 50000);
-
-
-        var colorArray = new Color32[512 * 512];
-
-        for (var i = 0; i < _dicomFile._mpPixelData.Length - 1; i += 4)
-        {
-            var color = new Color32(_dicomFile._mpPixelData[i + 0], _dicomFile._mpPixelData[i + 1], _dicomFile._mpPixelData[i + 2], _dicomFile._mpPixelData[i + 3]);
-
-            colorArray[i / 4] = color; 
-        }
-        */
-
-        //int j = 0; 
-        /*
-        byte[] _newPixelData = new byte[20 * 512 * 512];
-
-        for (int i = 0; i < temp.Length; i+=4)
-        {
-            _pixelData[i] = 0;
-            _pixelData[i+1] = (byte)(temp[i]);
-            _pixelData[i+2] = (byte)(temp[i]);
-            _pixelData[i+3] = (byte)(temp[i]);
-        }
-
-        for (int i = 0; i < _pixelData.Length - 1; i+=3)
-        {
-            _newPixelData[i] = (byte)((_pixelData[i] + _pixelData[i + 1] + _pixelData[i + 2])/3); 
-        }
-        */
-
-
-        /*
-        ushort temp;
-        //temp = new 
-        byte temp1;
-        byte[] _pixelDataTemp = new byte[512 * 512 + 1];
-
-        for (int i = 0; i < _dicomFile._mpPixelData.Length - 1; i+=2)
-        {
-            temp = (ushort)(_dicomFile._mpPixelData[i] | _dicomFile._mpPixelData[i+1] >> 8);
-
-            temp1 = (byte)(temp * 255 / 65535);
-
-            _pixelDataTemp[i % 2] = temp1;
-        }
-
-        for (int i = 0; i < 3 * 512 * 512 - 1; i+=3)
-        {
-            temp1 = _pixelDataTemp[i % 3];
-
-            _pixelData[i] = temp1;
-            _pixelData[i+1] = temp1;
-            _pixelData[i+2] = temp1;
-        }
-        */
-
-        /*
-        byte[] alphaByte = new byte[8 * 512 * 512];
-       
-        for (int i = 0; i < _dicomFile._mpPixelData.Length; i+=2)
-        {
-            //alphaByte[i] = 0;
-            alphaByte[i] = _dicomFile._mpPixelData[i];
-            alphaByte[i+1] = _dicomFile._mpPixelData[i];
-
-        }
-        */
-
-        //_pixelData = _dicomFile._mpPixelData;
-
-        //Texture2D texture = new Texture2D(512, 512, TextureFormat.R16, false, true);
-
-
-        /*
-        var colors = new Color32[_dicomFile._mpPixelData.Length/2];
-        //int r = color.r;
-        //int g = color.g;
-        //int b = color.b;
-
-        //int rgb = ((r >> 3) << 11) | ((g >> 2) << 5) | (b >> 3);
-
-        //bytes[0] = (byte)rgb;
-        //bytes[1] = (byte)(rgb >> 8);
-
-        for (int i = 0; i < _dicomFile._mpPixelData.Length; i += 2)
-        {
-            colors[i / 2] = new Color32((byte)(_dicomFile._mpPixelData[i] & amp; 0xF8),
-            (byte)(((rgb565Data[i] & amp; 7) &lt; &lt; 5) | ((rgb565Data[i + 1] & amp; 0xE0) >> 3)),
-            (byte)((rgb565Data[i + 1] & amp; 0x1F) &lt; &lt; 3),
-            (byte)1);
-    }
-    */
-
-        //texture.SetPixels32(colorArray);
-        //texture.LoadRawTextureData(_pixelData);
-        //texture.LoadRawTextureData(temp);
-        //texture.LoadRawTextureData(alphaByte);
-        //texture.LoadRawTextureData(_newPixelData);
-        //texture.LoadRawTextureData(_dicomFile._mpPixelData);
-
-        //texture.Apply();
-        //rawImage.GetComponent<RawImage>().material.mainTexture = texture;
-        //var pixelColor = texture.GetPixels32();
-
-
-        /*
-        Texture2D nTex = new Texture2D(512, 512, TextureFormat.RGBA32, false, true); ;
-
-        Color32[] pixels = nTex.GetPixels32();
-        for (int x = 0; x < nTex.width; x++)
-        {
-            for (int y = 0; y < nTex.height; y++)
+            for (int i = 0; i < _dicomFileDataList[idx]._pData.Length - 1; i += 2)
             {
-                Color32 pixel = pixels[x + y * nTex.width];
-                int p = ((256 * 256 + pixel.r) * 256 + pixel.b) * 256 + pixel.g;
-                int b = p % 256;
-                p = Mathf.FloorToInt(p / 256);
-                int g = p % 256;
-                p = Mathf.FloorToInt(p / 256);
-                int r = p % 256;
-                float l = (0.2126f * r / 255f) + 0.7152f * (g / 255f) + 0.0722f * (b / 255f);
-                Color c = new Color(l, l, l, 1);
-                nTex.SetPixel(x, y, c);
-                
+                _pixelData[i] = 0;
+                _pixelData[i + 1] = _dicomFileDataList[idx]._pData[i];
             }
+
+            Texture2D texture = new Texture2D(512, 512, TextureFormat.R16, false, true);
+
+            texture.LoadRawTextureData(_pixelData);
+
+            texture.Apply();
+
+            rawImage.GetComponent<RawImage>().texture = texture;
+
+            Texture2D newTex = new Texture2D(512, 512, TextureFormat.RGB24, false); 
+            newTex.ReadPixels(new Rect(0, 0, 512, 512), 0, 0);
+            newTex.Apply();
+
+            byte[] bytes = newTex.EncodeToPNG();
+
+            File.WriteAllBytes(Application.dataPath + string.Format("/Resources/TestDataset/CTImage{0}.png", idx + 1), bytes);
         }
-        nTex.Apply();
-        
 
 
-        //RenderTexture rTex = null;
-
-        //Graphics.Blit(texture, rTex);
-
-        //rawImage.GetComponent<RawImage>().material.mainTexture = texture;
-        rawImage.GetComponent<RawImage>().material.mainTexture = nTex;
-        */
-
-        //int conversion = (_dicomFile._mpPixelData.Length - 1 / 65535) * 255;
-        //_pixelData = _dicomFile._mpPixelData;
-
-        //_pixelData = new byte[2 * 512 * 512 + 1];
-        //_pixelData = _dicomFileDataList[0]._pData;
-
-        //int j = 0;
-
-        /*
-        for (int i = 0; i < 2 * 512 * 512; i++)
-        {
 
 
-            byte temp;
 
 
-            //j = i/2;
-            
-            temp = _dicomFileDataList[0]._pData[i];
-            //temp = _dicomFile._mpPixelData[i];
 
-            //byte temp1 = (byte)(temp * 255.0 / 65535.0);
-
-            _pixelData[j] = temp;
-
-            //_pixelData[j + 1] = temp;
-            //_pixelData[j + 2] = temp;
-            //_pixelData[j + 3] = temp;
-
-
-            j += 1;
-        }
-        */
-
-        //System.Buffer.BlockCopy(_dicomFile._mpPixelData, 0, _pixelData, 0, 1024);
-
-        //Texture2D texture = new Texture2D(512, 512, TextureFormat.Alpha8, false);
-        //Texture2D texture = new Texture2D(512, 512, TextureFormat.RGB565, false);
-        //Texture2D texture = new Texture2D(512, 512, TextureFormat.R8, true, false);
-        //Texture2D texture = new Texture2D(512, 512, TextureFormat.DXT5, false);
-
-        /*
-        // Best one for Dataset1 , but has colour. Need gray
-        Texture2D texture = new Texture2D(512, 512, TextureFormat.Alpha8, false, true);
-
-        texture.LoadRawTextureData(_pixelData);
-
-        texture.Apply();
-
-        rawImage.GetComponent<RawImage>().material.mainTexture = texture;
-        */
-
-
-        //while (_dicomFileDataList)
-        /*
-        foreach (DicomFileData fileData in _dicomFileDataList)
-        {
-
-        }
-        */
 
 
 
