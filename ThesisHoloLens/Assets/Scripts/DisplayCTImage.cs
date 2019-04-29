@@ -77,7 +77,8 @@ public class DisplayCTImage : MonoBehaviour {
         // Get all the CTxxx.dcm filenames and save them in a string array
 
         // We will only be getting CT scans that are .dcm in our case
-        _dicomFileNameList = Directory.GetFiles("Assets/Datasets/CTDatasetTest/", "CT*.dcm");
+        //_dicomFileNameList = Directory.GetFiles("Assets/Datasets/CTDatasetTest/", "CT*.dcm");
+        _dicomFileNameList = Directory.GetFiles("Assets/Datasets/CTDataset2/", "CT*.dcm");
 
         for (int i = 0; i < _dicomFileNameList.Length; i++)
         {
@@ -196,6 +197,45 @@ public class DisplayCTImage : MonoBehaviour {
 
         //byte[] bytes;
 
+        
+        for (int idx = 0; idx < _dicomFileDataList.Count; idx++)
+        {
+            _pixelData = new byte[6 * 512 * 512];
+
+            for (int i = 0; i < _dicomFileDataList[idx]._pData.Length - 1; i += 4)
+            {
+                _pixelData[i] = _dicomFileDataList[idx]._pData[i];
+                _pixelData[i + 1] = _dicomFileDataList[idx]._pData[i];
+                _pixelData[i + 2] = _dicomFileDataList[idx]._pData[i];
+                _pixelData[i + 3] = 1;
+            }
+
+
+
+            Texture2D texture = new Texture2D(512, 512, TextureFormat.RGBA32, false, true);
+
+            texture.LoadRawTextureData(_pixelData);
+
+            
+
+            texture.Apply();
+
+            //texture.ReadPixels(;
+            byte[] bytes = texture.EncodeToPNG();
+
+            rawImage.GetComponent<RawImage>().texture = texture;
+
+            //Texture2D newTex = new Texture2D(512, 512, TextureFormat.RGBA32, false); 
+            //newTex.ReadPixels(new Rect(700, 300, 512, 512), 0, 0);
+            //newTex.Apply();
+
+            //byte[] bytes = newTex.EncodeToPNG();
+
+            File.WriteAllBytes(Application.dataPath + string.Format("/Resources/TestDataset/IMG-0000-000{0}.png", idx + 1), bytes);
+        }
+        
+
+        /*
         for (int idx = 0; idx < _dicomFileDataList.Count; idx++)
         {
             _pixelData = new byte[6 * 512 * 512];
@@ -205,6 +245,7 @@ public class DisplayCTImage : MonoBehaviour {
                 _pixelData[i] = 0;
                 _pixelData[i + 1] = _dicomFileDataList[idx]._pData[i];
             }
+            
 
             Texture2D texture = new Texture2D(512, 512, TextureFormat.R16, false, true);
 
@@ -214,7 +255,7 @@ public class DisplayCTImage : MonoBehaviour {
 
             rawImage.GetComponent<RawImage>().texture = texture;
 
-            Texture2D newTex = new Texture2D(512, 512, TextureFormat.RGB24, false); 
+            Texture2D newTex = new Texture2D(512, 512, TextureFormat.RGB24, false);
             newTex.ReadPixels(new Rect(0, 0, 512, 512), 0, 0);
             newTex.Apply();
 
@@ -222,8 +263,7 @@ public class DisplayCTImage : MonoBehaviour {
 
             File.WriteAllBytes(Application.dataPath + string.Format("/Resources/TestDataset/CTImage{0}.png", idx + 1), bytes);
         }
-
-
+        */
 
 
 

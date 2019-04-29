@@ -172,7 +172,8 @@ public class DicomFile : MonoBehaviour
         //_msFileName = "CT002002002.dcm";
 
         //TODO: set filename to the end of path 
-        string path = "Assets/Datasets/CTDatasetTest/" + _msFileName;
+        //string path = "Assets/Datasets/CTDatasetTest/" + _msFileName;
+        string path = "Assets/Datasets/CTDataset2/" + _msFileName;
 
 
         if (!File.Exists(path))
@@ -479,12 +480,6 @@ public class DicomFile : MonoBehaviour
 
         pData[pRecord._mulLen] = 0;
 
-        //jctest
-        //	if (pRecord._musGrp == 0x0008 && (pRecord._musEle == 0x0000 || pRecord._musEle == 0x0001)) {
-        //		ULONG ul = *((ULONG *)pRecord._mpData);
-        //	}
-        //jctest
-
         // check if it is Explict VR or Implicit VR
         if (pRecord._musGrp == Convert.ToUInt16("0x0002", 16) && pRecord._musEle == Convert.ToUInt16("0x0010", 16))
         {
@@ -500,63 +495,6 @@ public class DicomFile : MonoBehaviour
             }
         }
 
-        // clasify the dicom into POI/ROI/RTPLAN/CT
-        if (_miDicomFileType == -1)
-        {
-
-            // check modality
-            if (pRecord._musGrp == 0x0008 && pRecord._musEle == 0x0060)
-            {
-                if (pRecord._mpData.Equals("CT"))
-                {
-
-                    // set file type as CT
-                    _miDicomFileType = 3;
-                }
-                else if (pRecord._mpData.Equals("RTPLAN"))
-                {
-
-                    // set file type as RTPLAN
-                    //_miDicomFileType = BBT_DICOM_FILE_RTPLAN;
-                    _miDicomFileType = 2;
-
-                    // set instance number for sorting
-                    //_miInstanceNum = BBT_INSTANCE_NUM_RTPLAN;
-                    _miInstanceNum = Int32.MaxValue - 1;
-                }
-            }
-            else if (pRecord._musGrp == 0x3006 && pRecord._musEle == 0x0004)
-            {
-                // check struct set name
-                if (pRecord._mpData.Equals("POI "))
-                {
-
-                    // set file type as POI
-                    //_miDicomFileType = BBT_DICOM_FILE_POI;
-                    _miDicomFileType = 1;
-
-                    // set instance number for sorting
-                    //_miInstanceNum = BBT_INSTANCE_NUM_POI;
-                    _miInstanceNum = Int32.MaxValue - 3;
-                }
-                else if (pRecord._mpData.Equals("ROI ") /*|| strcmp(pRecord._mpData, "test") == 0*/)
-                {
-
-                    // set file type as ROI
-                    //_miDicomFileType = BBT_DICOM_FILE_ROI;
-                    _miDicomFileType = 0;
-
-                    // set instance number for sorting
-                    //_miInstanceNum = BBT_INSTANCE_NUM_ROI;
-                    _miInstanceNum = Int32.MaxValue - 2;
-                }
-            }
-        }
-
-
-        // for debug
-        //	char szData[1024];
-        //	memcpy(szData, pData, min(sizeof(szData),pRecord->m_ulLen)); 
         return true;
     }
 
@@ -634,6 +572,7 @@ public class DicomFile : MonoBehaviour
                 _msPatientSex = Encoding.UTF8.GetString(pRecord._mpData).TrimEnd('\0').TrimEnd();
                 //_msPatientSex = string.Format("{0}", pRecord._mpData);
             }
+
             // (0028, 0010)	Image Rows (width)  M
             else if (pRecord._musGrp == Convert.ToUInt16("0x0028", 16) && pRecord._musEle == Convert.ToUInt16("0x0010", 16))
             {
