@@ -173,7 +173,7 @@ public class DicomFile : MonoBehaviour
 
         //TODO: set filename to the end of path 
         //string path = "Assets/Datasets/CTDatasetTest/" + _msFileName;
-        string path = "Assets/Datasets/CTDataset2/" + _msFileName;
+        string path = "Assets/Datasets/CTDataset1/" + _msFileName;
 
 
         if (!File.Exists(path))
@@ -183,7 +183,7 @@ public class DicomFile : MonoBehaviour
 
         //_gpDicomDict.Load(_msFileName);
 
-        
+        /*
         using (BinaryReader fs = new BinaryReader(File.Open(path, FileMode.Open, FileAccess.Read)))
         {
 
@@ -203,9 +203,9 @@ public class DicomFile : MonoBehaviour
             fs.Read(tempByte, 0, tempByte.Length);
             tempString = System.Text.Encoding.UTF8.GetString(tempByte, 0, tempByte.Length);
 
-            fs.Close();
+            fs.Dispose();
         }
-        
+        */
 
         //using (BinaryReader br = new BinaryReader(File.Open(path, FileMode.Open)))
         using (BinaryReader fs = new BinaryReader(File.Open(path, FileMode.Open, FileAccess.Read)))
@@ -248,7 +248,7 @@ public class DicomFile : MonoBehaviour
             }
 
 
-            fs.Close();
+            fs.Dispose();
 
             /*
             if (!bReadRecordOK)
@@ -476,14 +476,14 @@ public class DicomFile : MonoBehaviour
         // 
         // set data pointer
         pRecord._mpData = pData;
-        string mpDataString = Encoding.Default.GetString(pRecord._mpData);
+        string mpDataString = Encoding.UTF8.GetString(pRecord._mpData);
 
         pData[pRecord._mulLen] = 0;
 
         // check if it is Explict VR or Implicit VR
         if (pRecord._musGrp == Convert.ToUInt16("0x0002", 16) && pRecord._musEle == Convert.ToUInt16("0x0010", 16))
         {
-            string dataString = Encoding.Default.GetString(pRecord._mpData);
+            string dataString = Encoding.UTF8.GetString(pRecord._mpData);
 
             if (dataString.Equals("1.2.840.10008.1.2\0\0"))
             {

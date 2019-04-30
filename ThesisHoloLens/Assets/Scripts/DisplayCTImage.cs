@@ -78,7 +78,7 @@ public class DisplayCTImage : MonoBehaviour {
 
         // We will only be getting CT scans that are .dcm in our case
         //_dicomFileNameList = Directory.GetFiles("Assets/Datasets/CTDatasetTest/", "CT*.dcm");
-        _dicomFileNameList = Directory.GetFiles("Assets/Datasets/CTDataset2/", "CT*.dcm");
+        _dicomFileNameList = Directory.GetFiles("Assets/Datasets/CTDataset1/", "CT*.dcm");
 
         for (int i = 0; i < _dicomFileNameList.Length; i++)
         {

@@ -222,7 +222,7 @@ public class DicomDict : MonoBehaviour
 
 
 
-            br.Close();
+            br.Dispose();
             
 
         }
