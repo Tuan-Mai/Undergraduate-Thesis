@@ -37,10 +37,12 @@ public class Transformer : MonoBehaviour {
 	}
 
 	void Start () {
-		scale = Mathf.Clamp (this.transform.localScale[0], scaleMin, scaleMax);
+		//scale = Mathf.Clamp (this.transform.localScale[0], scaleMin, scaleMax);
 	}
 
 	void Update () {
+        
+        /*
 
 		// rotate 
 
@@ -95,6 +97,7 @@ public class Transformer : MonoBehaviour {
 			if (scroll == 0) isScaling = false;
 		}
 
+    */
 	}
 	
 }
