@@ -173,7 +173,7 @@ public class DicomFile : MonoBehaviour
 
         //TODO: set filename to the end of path 
         //string path = "Assets/Datasets/CTDatasetTest/" + _msFileName;
-        string path = "Assets/Datasets/CTDataset1/" + _msFileName;
+        string path = "Assets/Datasets/CTDataset2/" + _msFileName;
 
 
         if (!File.Exists(path))

@@ -78,7 +78,7 @@ public class DisplayCTImage : MonoBehaviour {
 
         // We will only be getting CT scans that are .dcm in our case
         //_dicomFileNameList = Directory.GetFiles("Assets/Datasets/CTDatasetTest/", "CT*.dcm");
-        _dicomFileNameList = Directory.GetFiles("Assets/Datasets/CTDataset1/", "CT*.dcm");
+        _dicomFileNameList = Directory.GetFiles("Assets/Datasets/CTDataset2/", "CT*.dcm");
 
         for (int i = 0; i < _dicomFileNameList.Length; i++)
         {
@@ -223,7 +223,7 @@ public class DisplayCTImage : MonoBehaviour {
             //texture.ReadPixels(;
             byte[] bytes = texture.EncodeToPNG();
 
-            rawImage.GetComponent<RawImage>().texture = texture;
+            //rawImage.GetComponent<RawImage>().texture = texture;
 
             //Texture2D newTex = new Texture2D(512, 512, TextureFormat.RGBA32, false); 
             //newTex.ReadPixels(new Rect(700, 300, 512, 512), 0, 0);
@@ -232,6 +232,9 @@ public class DisplayCTImage : MonoBehaviour {
             //byte[] bytes = newTex.EncodeToPNG();
 
             File.WriteAllBytes(Application.dataPath + string.Format("/Resources/TestDataset/IMG-0000-000{0}.png", idx + 1), bytes);
+
+            Loader loader = new Loader();
+            
         }
         
 
