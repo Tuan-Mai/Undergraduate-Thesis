@@ -1,4 +1,11 @@
-﻿using System.Collections;
+﻿/* 
+ * Dicom Dictionary Record
+ * Author: Tuan Mai
+ * Purpose: Structure for the DICOM Dictionary Record
+ * 
+ */
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 

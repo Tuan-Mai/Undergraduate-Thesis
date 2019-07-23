@@ -1,4 +1,11 @@
-﻿using System.Collections;
+﻿/* 
+ * Interaction Highlight
+ * Author: Tuan Mai
+ * Purpose: Checks to see what object the user is currently looking at
+ * 
+ */
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -33,6 +40,7 @@ public class InteractionHighlight : MonoBehaviour {
             renderer.material = materialInGaze;
             _objectInFocus = hitObject;
         }
+
         else
         {
             if (_objectInFocus == null)
