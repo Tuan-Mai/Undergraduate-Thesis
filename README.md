@@ -7,7 +7,7 @@ This thesis presents a partial solution of a wearable augmented reality (AR) sys
 ## Background
 
 ### Motivation
-My significant other has Polycystic Kidney Disease (PKD), which lead to this research, delving into building a system that can help create and/or improve monitoring and planning procedures for patients with PKD. 
+Polycystic Kidney Disease (PKD), a genetic disorder that does not have a cure, led to this research; delving into building a system that can help create and/or improve monitoring and planning procedures for patients with PKD. 
 
 Initial work and efforts were geared towards building a system speciallizing in Laparoscopic Renal Cyst Decortication procedures. Over the course of the work, the system was built in such a way that it was generalized to work with any organ, body part. This is due to the system built to read DICOM files. DICOM files are the standard in medical imaging file formats, thus allowing the system to read and display any DICOM file. 
 
